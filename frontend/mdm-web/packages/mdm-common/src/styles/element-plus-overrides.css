@@ -1,0 +1,48 @@
+/* =============================================================
+ * Element Plus 全局覆盖
+ * 用途：集中存放对 el-* 组件库的视觉/行为定制，避免散落在业务 .vue 中
+ * 引入：由 common/styles/index.css 通过 @import 链式加载
+ * 约束：本文件只放"会跨页面复用"的覆盖；仅当前页面用的样式放模块内
+ * ============================================================= */
+
+/* 主要标签文字 */
+.main-label {
+  font-weight: 600;
+  color: #303133;
+}
+
+/* 表格表头背景 */
+.el-table th.el-table__cell {
+  background: #f5f7fa;
+}
+
+/* 表格行底边框 */
+.el-table td.el-table__cell {
+  border-bottom: 1px solid #dcdfe6;
+}
+
+/* 主内容区 */
+.el-main {
+  padding: 0;
+}
+
+.el-container {
+  height: 100%;
+}
+
+/* 按钮间距 */
+.el-button+.el-button {
+  margin-left: 8px;
+}
+
+.gap-2 > .el-button + .el-button {
+  margin-left: 0;
+}
+
+#app .el-table thead {
+  color: #3D4247;
+}
+
+#app .el-table th.el-table__cell {
+  background: #F9FAFB;
+}

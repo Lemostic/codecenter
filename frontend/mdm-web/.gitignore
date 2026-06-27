@@ -1,0 +1,20 @@
+/.idea/
+/dist/
+/node_modules/
+/mock/
+/.env.development
+/.tmp/
+/docs/tmp/
+/.qoder/
+/.wolf/
+/.codex/
+/.claude/
+
+# Monorepo build artifacts
+**/dist/
+**/.turbo/
+**/tsconfig.tsbuildinfo
+**/.vite/
+**/node_modules/
+**/coverage/
+**/reports/

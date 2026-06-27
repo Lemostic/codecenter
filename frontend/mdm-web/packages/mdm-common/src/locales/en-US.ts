@@ -1,0 +1,23 @@
+export default {
+  common: {
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    save: 'Save',
+    delete: 'Delete',
+    edit: 'Edit',
+    create: 'Create',
+    search: 'Search',
+    reset: 'Reset',
+    back: 'Back',
+    loading: 'Loading...',
+    noData: 'No Data',
+    operationSuccess: 'Operation successful',
+    operationFailed: 'Operation failed',
+    deleteConfirm: 'Are you sure to delete "{name}"?',
+    deleteSuccess: 'Deleted successfully',
+    saveSuccess: 'Saved successfully',
+    loadFailed: 'Failed to load',
+    yes: 'Yes',
+    no: 'No',
+  },
+};

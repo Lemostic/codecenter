@@ -1,0 +1,51 @@
+{
+  "name": "@mdm/common",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./components/*": "./src/components/*",
+    "./composables/*": "./src/composables/*",
+    "./types/*": "./src/types/*",
+    "./stores/*": "./src/stores/*",
+    "./locales/*": "./src/locales/*",
+    "./styles/*": "./src/styles/*"
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && node build-dist.mjs",
+    "typecheck": "vue-tsc --noEmit",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "test:report": "vitest run --reporter=json --outputFile.json=reports/test-report.json"
+  },
+  "dependencies": {
+    "@mdm/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@formily/core": "^2.3.7",
+    "@formily/element-plus": "^1.1.0",
+    "@formily/vue": "^2.3.7",
+    "dayjs": "^1.11.13",
+    "element-plus": "^2.13.0",
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@formily/core": "^2.3.7",
+    "@formily/element-plus": "^1.1.0",
+    "@formily/vue": "^2.3.7",
+    "dayjs": "^1.11.13",
+    "element-plus": "^2.13.0",
+    "pinia": "^2.2.6",
+    "typescript": "^5.6.3",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.1.10"
+  }
+}

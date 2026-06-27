@@ -1,0 +1,23 @@
+export default {
+  common: {
+    confirm: '确定',
+    cancel: '取消',
+    save: '保存',
+    delete: '删除',
+    edit: '编辑',
+    create: '新增',
+    search: '查询',
+    reset: '重置',
+    back: '返回',
+    loading: '加载中...',
+    noData: '暂无数据',
+    operationSuccess: '操作成功',
+    operationFailed: '操作失败',
+    deleteConfirm: '确定要删除"{name}"吗？',
+    deleteSuccess: '删除成功',
+    saveSuccess: '保存成功',
+    loadFailed: '加载失败',
+    yes: '是',
+    no: '否',
+  },
+};
