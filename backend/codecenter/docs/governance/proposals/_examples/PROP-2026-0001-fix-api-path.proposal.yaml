@@ -1,0 +1,41 @@
+# ============================================================
+# 示例提案：修正 API 设计规范中 Mode B 示例的路径错误
+# ============================================================
+
+proposal:
+  id: "PROP-2026-0001"
+  type: "patch"
+  author: "zhangsan"
+  date: "2026-06-17"
+  status: "draft"
+
+  summary: "修正 api-design.md 中 Mode B 示例的错误路径前缀"
+  rationale: |
+    当前 api-design.md UNI-AD-003 的 Mode B 示例中，
+    使用了 /api/users 作为示例路径，但在某处错误地写成了
+    /api/v1/users，与 Mode B 不带版本前缀的规则矛盾。
+    本提案修正该路径以保持一致性。
+
+  changes:
+    - target: "universal/api-design.md"
+      action: "modify"
+      rule_ids: ["UNI-AD-003"]
+      description: "将 Mode B 示例中错误的 /api/v1/users 修正为 /api/users"
+      before: "Mode B 示例包含 /api/v1/users"
+      after: "Mode B 示例统一使用 /api/users"
+
+  impact:
+    affected_specs: ["api-design"]
+    affected_profiles: ["ddd", "spring-boot-mvc", "react-vue-frontend"]
+    breaking_change: false
+    migration_required: false
+
+  version_bump:
+    - module_id: "api-design"
+      current_version: "1.1"
+      new_version: "1.1.1"
+
+  review:
+    required_approvals: 1
+    reviewers: ["lisi"]
+    committee_approval: false

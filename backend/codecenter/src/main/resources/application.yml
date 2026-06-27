@@ -1,0 +1,101 @@
+spring:
+  application:
+    name: codecenter
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:13306/mdm_code?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: mdm_code
+    password: spDHtT5ybBTT766c
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 40
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+  data:
+    redis:
+      host: localhost
+      port: 16379
+      password: redis_PDJtRf
+      database: 0
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 16
+          min-idle: 4
+
+server:
+  port: 8088
+  servlet:
+    context-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+
+codecenter:
+  rule-cache:
+    ttl-seconds: 60
+    max-size: 2000
+  lifecycle:
+    pending-timeout-minutes: 30
+    recycle-lock-hours: 24
+    waste-threshold: 0.10
+    scan-interval-ms: 300000
+  dedup:
+    memory:
+      enabled: true
+      capacity: 20000
+    redis:
+      enabled: true
+      ttl-seconds: 604800
+  batch:
+    max-batch-size: 1000
+  i18n:
+    default-locale: zh_CN
+  security:
+    enabled: false
+  audit:
+    retention-days: 1825
+
+cosid:
+  enabled: true
+  namespace: cosid
+  segment:
+    enabled: true
+    mode: chain
+    step: 100
+    distributor:
+      type: jdbc
+      jdbc:
+        enable-auto-init-cosid-table: true
+        enable-auto-init-id-segment: true
+
+logging:
+  level:
+    root: INFO
+    com.meritdata.mdm: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-},%X{spanId:-}] %logger{36} - %msg%n'
+

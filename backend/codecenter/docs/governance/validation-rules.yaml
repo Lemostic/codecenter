@@ -1,0 +1,155 @@
+# ============================================================
+# 自动化校验规则配置
+# CI/CD 流水线在每次 PR 提交时执行以下校验
+# ============================================================
+
+version: "1.0"
+
+# ============================================================
+# 校验规则定义
+# ============================================================
+rules:
+
+  # --- 结构校验 ---
+  structure:
+
+    - id: "V-001"
+      name: "提案文件存在性"
+      severity: ERROR
+      description: "PR 必须包含至少一个 governance/proposals/*.proposal.yaml 文件"
+      check: "file_exists"
+      pattern: "governance/proposals/*.proposal.yaml"
+      min_count: 1
+
+    - id: "V-002"
+      name: "YAML 语法检查"
+      severity: ERROR
+      description: "所有 YAML 文件必须语法合法"
+      check: "yaml_syntax"
+      pattern: "**/*.yaml"
+
+    - id: "V-003"
+      name: "冲突标记检查"
+      severity: ERROR
+      description: "不得包含 Git 冲突标记（<<<<<<<, =======, >>>>>>>）"
+      check: "no_conflict_markers"
+      pattern: "**/*"
+
+  # --- 一致性校验 ---
+  consistency:
+
+    - id: "V-101"
+      name: "registry 路径完整性"
+      severity: ERROR
+      description: "registry.yaml 中所有 file_path 必须指向真实存在的文件"
+      check: "path_exists"
+      source: "governance/registry.yaml"
+      field: "modules[*].file_path"
+
+    - id: "V-102"
+      name: "Profile 模块完整性"
+      severity: ERROR
+      description: "_profile.yaml 声明的每个 module 必须有对应 .md 文件"
+      check: "profile_module_exists"
+      pattern: "profiles/**/_profile.yaml"
+
+    - id: "V-103"
+      name: "路由规则完整性"
+      severity: ERROR
+      description: "routing-rules.yaml 中引用的所有 spec 文件必须存在"
+      check: "routing_path_exists"
+      source: "skill/routing-rules.yaml"
+
+    - id: "V-104"
+      name: "规则 ID 唯一性"
+      severity: ERROR
+      description: "跨文件不得出现重复的规则 ID（如 PROF-DDD-XXX）"
+      check: "unique_rule_ids"
+      pattern: "universal/**/*.md, profiles/**/*.md, spi/**/*.md"
+      extract_regex: "(PROF-[A-Z]+-\\d+|UNI-[A-Z]+-\\d+)"
+
+    - id: "V-105"
+      name: "双向引用一致性"
+      severity: ERROR
+      description: "routing-rules.yaml 的 spec_registry 与 profile_rules 中的 spec_id 必须一致"
+      check: "cross_reference_match"
+      source_a: "skill/routing-rules.yaml:profile_rules[*].specs[*].spec_id"
+      source_b: "skill/routing-rules.yaml:spec_registry[*].spec_id"
+
+  # --- 完整性校验 ---
+  completeness:
+
+    - id: "V-201"
+      name: "版本号合规"
+      severity: ERROR
+      description: "变更模块的版本号必须遵循 SemVer 格式且大于 registry 中的当前版本"
+      check: "semver_increment"
+      source: "governance/registry.yaml"
+
+    - id: "V-202"
+      name: "依赖完整性"
+      severity: ERROR
+      description: "所有 depends_on 引用的模块必须存在且状态为 active"
+      check: "dependency_active"
+      source: "governance/registry.yaml"
+      field: "modules[*].depends_on"
+
+    - id: "V-203"
+      name: "CHANGELOG 条目存在"
+      severity: WARN
+      description: "每个变更应在 CHANGELOG.md 中有对应记录"
+      check: "changelog_entry_exists"
+      source: "governance/CHANGELOG.md"
+
+  # --- 安全校验 ---
+  security:
+
+    - id: "V-301"
+      name: "受保护文件检查"
+      severity: ERROR
+      description: "PR 不得直接修改受保护的 .md 文件（必须通过提案系统）"
+      check: "no_protected_file_diff"
+      protected_list_source: "governance/permissions.yaml:protected_files[*].path"
+      # 允许的例外：提案中明确声明修改的文件
+      exception: "proposal_declares_change"
+
+    - id: "V-302"
+      name: "占位符完整性"
+      severity: WARN
+      description: "{{variable_name}} 占位符不得在修改中被意外消除"
+      check: "placeholder_preserved"
+      pattern: "universal/**/*.md, profiles/**/*.md"
+      extract_regex: "\\{\\{[a-z_]+\\}\\}"
+
+    - id: "V-303"
+      name: "权限校验"
+      severity: ERROR
+      description: "PR 作者的角色必须具备该提案类型所需的权限"
+      check: "role_permission"
+      source: "governance/permissions.yaml"
+
+# ============================================================
+# 校验执行配置
+# ============================================================
+execution:
+  # CI 触发条件
+  triggers:
+    - on: pull_request
+      branches: ["main", "develop"]
+    - on: push
+      branches: ["main"]  # 合并后再次校验
+
+  # 校验超时（秒）
+  timeout: 120
+
+  # 校验失败时的行为
+  on_failure:
+    - block_merge: true            # 阻止合并
+    - post_comment: true           # 在 PR 评论中列出失败项
+    - notify_maintainers: true     # 通知维护者
+
+  # 全量巡检（定时）
+  health_check:
+    schedule: "0 9 * * 1"          # 每周一 9:00 UTC
+    scope: full                     # 全量扫描
+    notify_on_failure: true

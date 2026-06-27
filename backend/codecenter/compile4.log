@@ -1,0 +1,27 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.meritdata.mdm:codecenter >--------------------
+[INFO] Building codecenter 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ codecenter ---
+[INFO] Deleting D:\dev\Projects\codecenter\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ codecenter ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ codecenter ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 85 source files with javac [debug parameters release 21] to target\classes
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\domain\valueobject\config\SegmentTypeConfig.javaʹ�û򸲸����ѹ�ʱ�� API��
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\application\service\WaterMarkService.javaʹ����δ�����򲻰�ȫ�Ĳ�����
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.436 s
+[INFO] Finished at: 2026-06-27T21:48:23+08:00
+[INFO] ------------------------------------------------------------------------

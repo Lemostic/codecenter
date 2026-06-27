@@ -1,0 +1,16 @@
+version: "1.0"
+profile_id: "spi-data-governance"
+domain: "data-governance"
+description: "数据治理领域规范，涵盖数据质量、元数据管理、数据血缘等通用技术规则"
+activation:
+  requires_domain: "data-governance"
+depends_on:
+  - naming-conventions
+  - api-design
+  - logging-standards
+status: "active"
+tags:
+  - "data-quality"
+  - "metadata"
+  - "data-lineage"
+  - "data-classification"

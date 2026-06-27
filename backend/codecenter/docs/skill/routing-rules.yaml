@@ -1,0 +1,529 @@
+# ============================================================
+# 规范路由规则配置文件 (v2.2 — profiles/ 平台化目录)
+# Skill 引擎根据本文件决定为当前项目加载哪些规范
+# 所有 file_path 相对于 docs/ 目录
+# ============================================================
+
+version: "2.2"
+
+# ============================================================
+# 一、通用规范（所有项目强制加载，忽略任何 override）
+# ============================================================
+universal_specs:
+  - spec_id: "naming-conventions"
+    file_path: "universal/naming-conventions.md"
+    level: L0
+    keywords: ["命名", "naming", "变量", "函数", "类名", "文件名"]
+    reason: "命名规范是所有项目的基础底线"
+
+  - spec_id: "git-workflow"
+    file_path: "universal/git-workflow.md"
+    level: L0
+    keywords: ["git", "分支", "提交", "commit", "branch", "PR", "MR"]
+    reason: "统一的版本控制流程是团队协作的基础"
+
+  - spec_id: "api-design"
+    file_path: "universal/api-design.md"
+    level: L0
+    keywords: ["API", "REST", "接口", "endpoint", "URL", "响应格式"]
+    reason: "统一API设计风格降低前后端协作成本"
+
+  - spec_id: "security-baseline"
+    file_path: "universal/security-baseline.md"
+    level: L0
+    keywords: ["安全", "security", "XSS", "SQL注入", "CSRF", "认证", "授权"]
+    reason: "安全基线是不可妥协的底线"
+
+  - spec_id: "testing-strategy"
+    file_path: "universal/testing-strategy.md"
+    level: L0
+    keywords: ["测试", "test", "单元测试", "覆盖率", "mock", "TDD", "测试金字塔", "CI"]
+    reason: "测试策略是代码质量的保障（L0 跨语言策略层，Java 框架约定下沉至 L1 testing-jvm）"
+
+  - spec_id: "logging-standards"
+    file_path: "universal/logging-standards.md"
+    level: L0
+    keywords: ["日志", "log", "slf4j", "logback", "脱敏", "日志级别"]
+    reason: "日志规范是可观测性的基础"
+
+  - spec_id: "exception-handling"
+    file_path: "universal/exception-handling.md"
+    level: L0
+    keywords: ["异常", "exception", "错误处理", "全局异常", "BusinessException"]
+    reason: "统一异常处理是系统可维护性的基础"
+
+  - spec_id: "request-tracing"
+    file_path: "universal/request-tracing.md"
+    level: L0
+    keywords: ["链路追踪", "traceId", "spanId", "MDC", "AOP", "切面", "请求上下文"]
+    reason: "链路追踪是分布式系统排障的基础设施"
+
+  - spec_id: "change-scope-control"
+    file_path: "universal/change-scope-control.md"
+    level: L0
+    keywords: ["变更范围", "保护", "防重复", "inventory", "glossary", "测试保护", "最小化修改"]
+    reason: "控制AI变更范围、防止重复造轮子、保护已有测试与代码"
+
+  - spec_id: "ai-hallucination-defense"
+    file_path: "universal/ai-hallucination-defense.md"
+    level: L0
+    keywords: ["AI 幻觉", "hallucination", "API 验证", "类型检查", "提示词模板", "复用检查"]
+    reason: "AI 协作编码时的幻觉识别与防御规范，覆盖 5 类常见幻觉、4 个提示词模板与代码验证流程"
+
+  - spec_id: "performance-baseline"
+    file_path: "universal/performance-baseline.md"
+    level: L0
+    keywords: ["性能", "N+1", "分页", "批量", "懒加载", "虚拟滚动", "缓存", "慢查询"]
+    reason: "性能基线是所有项目日常编码必须遵循的底线"
+
+# ============================================================
+# 二、原子化架构包路由（按 fingerprint.profiles 列表匹配）
+# ============================================================
+#
+# manifest 中 fingerprint.profiles 是一个列表，Skill 引擎
+# 逐个匹配下方定义的 package_id，加载对应的 spec 文件。
+#
+# profiles/ 目录按平台划分：
+#   backend/  — 后端方案（框架基座 + 架构风格 + 持久化技术）
+#   frontend/ — 前端方案（Vue 3）
+#
+# 包类型说明:
+#   framework-base  — 框架基座，被架构包隐含依赖
+#   architecture    — 架构风格（MVC / DDD），互斥
+#   architecture-module — 架构子模块，随父架构包自动加载
+#   persistence     — 持久化技术，可多选
+#   frontend        — 前端框架
+#   frontend-module — 前端子模块，随父前端包自动加载
+# ============================================================
+
+package_registry:
+
+  # ---------- 框架基座 ----------
+  - package_id: "spring-boot-base"
+    package_type: "framework-base"
+    description: "Spring Boot 通用基础：DI、事务、异常、响应封装"
+    specs:
+      - spec_id: "base-spring-boot"
+        file_path: "profiles/backend/spring-boot-base.md"
+        level: L1
+        keywords: ["构造器注入", "事务", "Transactional", "统一响应", "全局异常", "Spring"]
+
+  # ---------- 架构风格：MVC ----------
+  - package_id: "arch-mvc"
+    package_type: "architecture"
+    description: "Spring Boot MVC 三层架构"
+    conflicts_with: ["arch-ddd"]
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "mvc-structure"
+        file_path: "profiles/backend/arch-mvc.md"
+        level: L1
+        keywords: ["分层", "目录结构", "controller", "service", "mapper", "MVC"]
+
+  # ---------- 架构风格：DDD ----------
+  - package_id: "arch-ddd"
+    package_type: "architecture"
+    description: "DDD 四层架构（含领域模型、事件、CQRS 子模块）"
+    conflicts_with: ["arch-mvc"]
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "ddd-structure"
+        file_path: "profiles/backend/ddd/arch-ddd.md"
+        level: L1
+        keywords: ["四层", "adapter", "app", "domain", "infrastructure", "DDD"]
+      - spec_id: "ddd-domain-model"
+        file_path: "profiles/backend/ddd/domain-model.md"
+        level: L1
+        keywords: ["聚合根", "实体", "值对象", "领域服务", "领域事件", "仓储", "Aggregate", "Entity", "ValueObject"]
+      - spec_id: "ddd-event-patterns"
+        file_path: "profiles/backend/ddd/event-patterns.md"
+        level: L1
+        keywords: ["领域事件", "DomainEvent", "事件发布", "事件处理", "幂等", "Outbox"]
+      - spec_id: "ddd-cqrs"
+        file_path: "profiles/backend/ddd/cqrs.md"
+        level: L1
+        keywords: ["CQRS", "读写分离", "Command", "Query", "命令", "查询"]
+
+  # ---------- 持久化：MyBatis-Plus ----------
+  - package_id: "persistence-mybatis-plus"
+    package_type: "persistence"
+    description: "MyBatis-Plus 持久化规范"
+    conflicts_with: ["persistence-mybatis", "persistence-jpa"]
+    specs:
+      - spec_id: "mbp-persistence"
+        file_path: "profiles/backend/persistence-mybatis-plus.md"
+        level: L1
+        keywords: ["MyBatis-Plus", "BaseMapper", "LambdaQueryWrapper", "分页", "Page"]
+
+  # ---------- 持久化：MyBatis ----------
+  - package_id: "persistence-mybatis"
+    package_type: "persistence"
+    description: "原生 MyBatis 持久化规范"
+    conflicts_with: ["persistence-mybatis-plus", "persistence-jpa"]
+    specs:
+      - spec_id: "mb-persistence"
+        file_path: "profiles/backend/persistence-mybatis.md"
+        level: L1
+        keywords: ["MyBatis", "Mapper", "XML", "动态SQL", "resultMap"]
+
+  # ---------- 持久化：JPA ----------
+  - package_id: "persistence-jpa"
+    package_type: "persistence"
+    description: "Spring Data JPA / QueryDSL 持久化规范"
+    conflicts_with: ["persistence-mybatis-plus", "persistence-mybatis"]
+    specs:
+      - spec_id: "jpa-persistence"
+        file_path: "profiles/backend/persistence-jpa.md"
+        level: L1
+        keywords: ["JPA", "Hibernate", "Repository", "QueryDSL", "Entity"]
+
+  # ---------- 持久化：Redis ----------
+  - package_id: "persistence-redis"
+    package_type: "persistence"
+    description: "Redis 缓存与数据存储规范"
+    specs:
+      - spec_id: "redis-persistence"
+        file_path: "profiles/backend/persistence-redis.md"
+        level: L1
+        keywords: ["Redis", "缓存", "cache", "分布式锁", "Lettuce", "Redisson"]
+
+  # ---------- 持久化：Elasticsearch ----------
+  - package_id: "persistence-elasticsearch"
+    package_type: "persistence"
+    description: "Elasticsearch 搜索与存储规范"
+    specs:
+      - spec_id: "es-persistence"
+        file_path: "profiles/backend/persistence-elasticsearch.md"
+        level: L1
+        keywords: ["Elasticsearch", "ES", "索引", "搜索", "mapping", "Kibana"]
+
+  # ---------- 消息队列：Kafka ----------
+  - package_id: "messaging-kafka"
+    package_type: "messaging"
+    description: "Kafka 消息队列规范：Topic 命名、消息格式、幂等消费、死信队列"
+    conflicts_with: ["messaging-rocketmq"]
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "messaging-kafka"
+        file_path: "profiles/backend/messaging-kafka.md"
+        level: L1
+        keywords: ["Kafka", "消息队列", "Topic", "Producer", "Consumer", "死信队列", "幂等", "MQ"]
+
+  # ---------- 消息队列：RocketMQ ----------
+  - package_id: "messaging-rocketmq"
+    package_type: "messaging"
+    description: "RocketMQ 消息队列规范：Topic/Tag 设计、事务消息、顺序消息、延迟消息（与 Kafka 互斥）"
+    conflicts_with: ["messaging-kafka"]
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "messaging-rocketmq"
+        file_path: "profiles/backend/messaging-rocketmq.md"
+        level: L1
+        keywords: ["RocketMQ", "消息队列", "Topic", "Tag", "事务消息", "顺序消息", "延迟消息", "MQ", "阿里"]
+
+  # ---------- 测试框架：JVM ----------
+  - package_id: "testing-jvm"
+    package_type: "testing"
+    description: "JVM 测试框架约定：JUnit 5 + AssertJ + Mockito + Spring Boot 测试切片 + TestContainers"
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "testing-jvm"
+        file_path: "profiles/backend/testing-jvm.md"
+        level: L1
+        keywords: ["JUnit", "JUnit5", "AssertJ", "Mockito", "SpringBootTest", "TestContainers", "@DataJpaTest", "@WebMvcTest", "单测", "集成测试"]
+
+  # ---------- 数据库迁移：Flyway / Liquibase ----------
+  - package_id: "db-migration"
+    package_type: "persistence-extension"
+    description: "数据库 schema 迁移规范：Flyway/Liquibase 选型、版本号规则、回滚、多环境执行"
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "db-migration"
+        file_path: "profiles/backend/db-migration.md"
+        level: L1
+        keywords: ["Flyway", "Liquibase", "数据库迁移", "schema", "DDL", "versioned migration", "V20260618", "V1.0"]
+
+  # ---------- 后端：DevOps 与 CI/CD ----------
+  - package_id: "devops-cicd"
+    package_type: "devops"
+    description: "DevOps 与 CI/CD 规范：CI 流水线 6 阶段、Docker 多阶段构建、K8s 健康检查、4 个黄金信号告警"
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "devops-cicd"
+        file_path: "profiles/backend/devops-cicd.md"
+        level: L1
+        keywords: ["CI", "CD", "Docker", "K8s", "Jenkins", "GitHub Actions", "Prometheus", "探针", "健康检查", "镜像", "告警"]
+
+  # ---------- 前端：Vue ----------
+  # ---------- 后端：API 设计 ----------
+  - package_id: "api-design"
+    package_type: "backend-base"
+    description: "RESTful API 设计规范：URL 命名、统一响应、HTTP 状态码、业务错误码体系、版本管理"
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "api-design"
+        file_path: "profiles/backend/api-design.md"
+        level: L1
+        keywords: ["RESTful", "API 设计", "URL 命名", "统一响应", "错误码", "版本管理", "OpenAPI"]
+
+  # ---------- 后端：错误处理与日志 ----------
+  - package_id: "error-handling"
+    package_type: "backend-base"
+    description: "错误处理与日志规范：ErrorCode 枚举、BizException、全局异常处理器、链路追踪集成、结构化日志"
+    implicit_dependencies: ["spring-boot-base"]
+    specs:
+      - spec_id: "error-handling"
+        file_path: "profiles/backend/error-handling.md"
+        level: L1
+        keywords: ["异常处理", "ErrorCode", "BizException", "全局异常", "traceId", "MDC", "结构化日志", "Feign"]
+
+  # ---------- 后端：安全实践 ----------
+  - package_id: "security-practices"
+    package_type: "backend-base"
+    description: "安全实践规范：SQL 注入/XSS/CSRF 防护、JWT、BCrypt、RBAC 权限、安全响应头、审计日志"
+    implicit_dependencies: ["spring-boot-base", "api-design"]
+    specs:
+      - spec_id: "security-practices"
+        file_path: "profiles/backend/security-practices.md"
+        level: L1
+        keywords: ["SQL 注入", "XSS", "CSRF", "JWT", "BCrypt", "RBAC", "权限", "审计日志", "安全头"]
+
+  - package_id: "frontend-vue"
+    package_type: "frontend"
+    description: "Vue 3 前端规范"
+    specs:
+      - spec_id: "frontend-vue-overview"
+        file_path: "profiles/frontend/vue/00-overview.md"
+        level: L1
+        keywords: ["frontend-vue", "Vue", "包", "概览"]
+      - spec_id: "fe-architecture"
+        file_path: "profiles/frontend/vue/common/architecture.md"
+        level: L1
+        keywords: ["分层", "三层架构", "core/common/modules", "文件定位", "路由"]
+      - spec_id: "fe-structure"
+        file_path: "profiles/frontend/vue/common/structure.md"
+        level: L1
+        keywords: ["目录结构", "就近原则", "Barrel exports", "导入顺序", "TS strict"]
+      - spec_id: "fe-api"
+        file_path: "profiles/frontend/vue/common/api-conventions.md"
+        level: L1
+        keywords: ["API", "5件套", "list/get/create/update/delete", "错误处理", "try/catch/finally"]
+      - spec_id: "fe-type-system"
+        file_path: "profiles/frontend/vue/common/type-system.md"
+        level: L1
+        keywords: ["类型", "BaseEntity", "5件套", "Entity/VO/CreateDTO/UpdateDTO/Query"]
+      - spec_id: "fe-i18n"
+        file_path: "profiles/frontend/vue/common/i18n.md"
+        level: L1
+        keywords: ["i18n", "国际化", "4段式", "命名空间"]
+      - spec_id: "fe-vue3-script-setup"
+        file_path: "profiles/frontend/vue/vue3/script-setup.md"
+        level: L1
+        keywords: ["script setup", "defineProps", "defineEmits", "10步顺序", "composition"]
+      - spec_id: "fe-vue3-component"
+        file_path: "profiles/frontend/vue/vue3/component.md"
+        level: L1
+        keywords: ["组件", "Props", "组合模式", "a11y", "样式隔离"]
+      - spec_id: "fe-vue3-state"
+        file_path: "profiles/frontend/vue/vue3/state.md"
+        level: L1
+        keywords: ["状态", "Pinia", "composable", "本地状态", "服务端状态"]
+      - spec_id: "fe-vue3-element-plus"
+        file_path: "profiles/frontend/vue/vue3/ui-element-plus.md"
+        level: L1
+        keywords: ["Element Plus", "el-dialog", "el-table", "el-form", "必填属性"]
+      - spec_id: "fe-vue3-encapsulated"
+        file_path: "profiles/frontend/vue/vue3/encapsulated.md"
+        level: L1
+        keywords: ["强制封装", "EncapsulatedTable", "决策树", "10类场景"]
+      - spec_id: "fe-vue3-page-patterns"
+        file_path: "profiles/frontend/vue/vue3/page-patterns.md"
+        level: L1
+        keywords: ["页面模式", "flex三段式", "左树右表", "PageHeader", "PageFrame"]
+      - spec_id: "fe-vue3-design-tokens"
+        file_path: "profiles/frontend/vue/vue3/design-tokens.md"
+        level: L1
+        keywords: ["设计Token", "颜色", "字体", "间距", "p-3", "圆角", "阴影"]
+      - spec_id: "fe-selfcheck"
+        file_path: "profiles/frontend/vue/selfcheck.md"
+        level: L1
+        keywords: ["自检", "checklist", "合规", "AI编码"]
+
+# ============================================================
+# 三、SPI 领域插件路由（按 fingerprint.domains 匹配）
+# ============================================================
+spi_domains:
+
+  - domain: "data-governance"
+    profile_id: "spi-data-governance"
+    spec_file: "spi/data-governance/domain-spec.md"
+    profile_file: "spi/data-governance/_profile.yaml"
+    active: true
+    keywords: ["数据治理", "数据质量", "元数据", "数据血缘", "数据分类"]
+
+  - domain: "mdm-frontend"
+    profile_id: "spi-mdm-frontend"
+    spec_file: "spi/mdm-frontend/domain-spec.md"
+    profile_file: "spi/mdm-frontend/_profile.yaml"
+    skill_file: "spi/mdm-frontend/SKILL.md"
+    active: true
+    keywords: ["主数据", "MDM", "TpTable", "TpPageFrame", "TpLeftTreeLayout", "TpCardList", "ModelCard", "TpPagination", "useCrudList", "useImportExport", "useFormValidation", "statusTagType", "@mdm", "apps/modules", "monorepo"]
+
+# ============================================================
+# 四、覆盖机制说明
+# ============================================================
+# 1. manifest 中的 overrides.disabled_specs 可以禁用任意非 universal 规范
+#    示例：disabled_specs: ["ddd-cqrs"] 将跳过 CQRS 规范加载
+#
+# 2. manifest 中的 overrides.forced_specs 可以强制加载任意规范（无视匹配规则）
+#    示例：forced_specs: ["spi-data-governance"] 将强制加载数据治理规范
+#
+# 3. universal_specs 不可被 disabled_specs 禁用（始终加载）
+#
+# 4. 覆盖操作将被记录到 .spec/override-log.yaml 中，供审计使用
+
+# ============================================================
+# 五、完整规范 ID 索引（供 manifest 中的 override 引用）
+# ============================================================
+spec_registry:
+  # --- L0 通用规范 ---
+  - spec_id: "naming-conventions"
+    file_path: "universal/naming-conventions.md"
+    level: L0
+  - spec_id: "git-workflow"
+    file_path: "universal/git-workflow.md"
+    level: L0
+  - spec_id: "api-design"
+    file_path: "universal/api-design.md"
+    level: L0
+  - spec_id: "security-baseline"
+    file_path: "universal/security-baseline.md"
+    level: L0
+  - spec_id: "testing-strategy"
+    file_path: "universal/testing-strategy.md"
+    level: L0
+  - spec_id: "logging-standards"
+    file_path: "universal/logging-standards.md"
+    level: L0
+  - spec_id: "exception-handling"
+    file_path: "universal/exception-handling.md"
+    level: L0
+  - spec_id: "request-tracing"
+    file_path: "universal/request-tracing.md"
+    level: L0
+  - spec_id: "change-scope-control"
+    file_path: "universal/change-scope-control.md"
+    level: L0
+  - spec_id: "ai-hallucination-defense"
+    file_path: "universal/ai-hallucination-defense.md"
+    level: L0
+  - spec_id: "performance-baseline"
+    file_path: "universal/performance-baseline.md"
+    level: L0
+
+  # --- L1 后端：框架基座 ---
+  - spec_id: "base-spring-boot"
+    file_path: "profiles/backend/spring-boot-base.md"
+    level: L1
+
+  # --- L1 后端：架构风格 ---
+  - spec_id: "mvc-structure"
+    file_path: "profiles/backend/arch-mvc.md"
+    level: L1
+  - spec_id: "ddd-structure"
+    file_path: "profiles/backend/ddd/arch-ddd.md"
+    level: L1
+  - spec_id: "ddd-domain-model"
+    file_path: "profiles/backend/ddd/domain-model.md"
+    level: L1
+  - spec_id: "ddd-event-patterns"
+    file_path: "profiles/backend/ddd/event-patterns.md"
+    level: L1
+  - spec_id: "ddd-cqrs"
+    file_path: "profiles/backend/ddd/cqrs.md"
+    level: L1
+
+  # --- L1 后端：持久化 ---
+  - spec_id: "mbp-persistence"
+    file_path: "profiles/backend/persistence-mybatis-plus.md"
+    level: L1
+  - spec_id: "mb-persistence"
+    file_path: "profiles/backend/persistence-mybatis.md"
+    level: L1
+  - spec_id: "jpa-persistence"
+    file_path: "profiles/backend/persistence-jpa.md"
+    level: L1
+  - spec_id: "redis-persistence"
+    file_path: "profiles/backend/persistence-redis.md"
+    level: L1
+  - spec_id: "es-persistence"
+    file_path: "profiles/backend/persistence-elasticsearch.md"
+    level: L1
+
+  # --- L1 后端：消息队列 ---
+  - spec_id: "messaging-kafka"
+    file_path: "profiles/backend/messaging-kafka.md"
+    level: L1
+  - spec_id: "messaging-rocketmq"
+    file_path: "profiles/backend/messaging-rocketmq.md"
+    level: L1
+
+  # --- L1 后端：测试框架 / 数据库迁移 ---
+  - spec_id: "testing-jvm"
+    file_path: "profiles/backend/testing-jvm.md"
+    level: L1
+  - spec_id: "db-migration"
+    file_path: "profiles/backend/db-migration.md"
+    level: L1
+
+  # --- L1 前端：frontend-vue ---
+  - spec_id: "frontend-vue-overview"
+    file_path: "profiles/frontend/vue/00-overview.md"
+    level: L1
+  - spec_id: "fe-architecture"
+    file_path: "profiles/frontend/vue/common/architecture.md"
+    level: L1
+  - spec_id: "fe-structure"
+    file_path: "profiles/frontend/vue/common/structure.md"
+    level: L1
+  - spec_id: "fe-api"
+    file_path: "profiles/frontend/vue/common/api-conventions.md"
+    level: L1
+  - spec_id: "fe-type-system"
+    file_path: "profiles/frontend/vue/common/type-system.md"
+    level: L1
+  - spec_id: "fe-i18n"
+    file_path: "profiles/frontend/vue/common/i18n.md"
+    level: L1
+  - spec_id: "fe-vue3-script-setup"
+    file_path: "profiles/frontend/vue/vue3/script-setup.md"
+    level: L1
+  - spec_id: "fe-vue3-component"
+    file_path: "profiles/frontend/vue/vue3/component.md"
+    level: L1
+  - spec_id: "fe-vue3-state"
+    file_path: "profiles/frontend/vue/vue3/state.md"
+    level: L1
+  - spec_id: "fe-vue3-element-plus"
+    file_path: "profiles/frontend/vue/vue3/ui-element-plus.md"
+    level: L1
+  - spec_id: "fe-vue3-encapsulated"
+    file_path: "profiles/frontend/vue/vue3/encapsulated.md"
+    level: L1
+  - spec_id: "fe-vue3-page-patterns"
+    file_path: "profiles/frontend/vue/vue3/page-patterns.md"
+    level: L1
+  - spec_id: "fe-vue3-design-tokens"
+    file_path: "profiles/frontend/vue/vue3/design-tokens.md"
+    level: L1
+  - spec_id: "fe-selfcheck"
+    file_path: "profiles/frontend/vue/selfcheck.md"
+    level: L1
+
+  # --- L2 SPI 领域规范 ---
+  - spec_id: "spi-data-governance"
+    file_path: "spi/data-governance/domain-spec.md"
+    level: L2
+  - spec_id: "spi-mdm-frontend"
+    file_path: "spi/mdm-frontend/domain-spec.md"
+    level: L2

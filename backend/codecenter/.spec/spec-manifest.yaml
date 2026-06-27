@@ -1,0 +1,29 @@
+# ============================================================
+# spec-manifest.yaml — 项目规范清单
+# 由 bootstrap.sh 自动生成
+# Skill 引擎根据本文件自动路由并加载适用的编码规范
+# ============================================================
+
+version: "2.0"
+
+project:
+  name: "codecenter"
+  description: ""  # 请填写项目一句话描述
+
+fingerprint:
+  profiles:
+    - spring-boot-base
+    - persistence-jpa
+    - persistence-redis
+  tech_stack: ["java", "spring-boot", "jpa", "redis"]
+  domains: []              # 如需激活 SPI 插件: ["data-governance"]
+  http_mode: "2"  # 1 = 全 RESTful | 2 = 简化 GET/POST
+
+protection:
+  protected_globs: []      # 示例: ["**/application-*.yml", "**/pom.xml"]
+  enable_branch_protection: true
+  require_ci_pass: true
+
+overrides:
+  disabled_specs: []       # 显式禁用的规范 ID
+  forced_specs: []         # 强制加载的规范 ID

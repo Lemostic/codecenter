@@ -1,0 +1,161 @@
+# L0 Universal Specs — 通用基础规范索引
+# 版本: 1.0
+# 最后更新: 2026-06-17
+
+version: "1.0"
+layer: L0
+description: >
+  L0 层通用基础规范,适用于所有技术栈与架构形态。
+  无论项目采用单体、微服务还是 Serverless 架构,均 MUST 遵守本层规范。
+
+specs:
+  - id: UNI-NC
+    file: naming-conventions.md
+    title: 命名规范
+    version: "1.0"
+    summary: >
+      跨语言统一命名约定,覆盖 Java、TypeScript/JavaScript、数据库、
+      API 端点、文件与包/模块的命名规则,确保代码库可读性与一致性。
+    keywords:
+      - naming
+      - camelCase
+      - PascalCase
+      - snake_case
+      - kebab-case
+      - convention
+
+  - id: UNI-GW
+    file: git-workflow.md
+    title: Git 工作流规范
+    version: "1.0"
+    summary: >
+      Git 分支策略、提交信息格式(Conventional Commits)、
+      PR/MR 评审流程、语义化版本标签(SemVer)及合并策略。
+    keywords:
+      - git
+      - branch
+      - commit
+      - conventional-commits
+      - semver
+      - pull-request
+
+  - id: UNI-AD
+    file: api-design.md
+    title: API 设计规范
+    version: "1.0"
+    summary: >
+      RESTful API 设计标准,包含 URL 约定、HTTP 方法语义、
+      统一响应格式、错误码体系、分页约定与版本管理策略。
+    keywords:
+      - api
+      - rest
+      - http
+      - response
+      - pagination
+      - versioning
+
+  - id: UNI-SB
+    file: security-baseline.md
+    title: 安全基线规范
+    version: "1.0"
+    summary: >
+      应用安全最低要求,覆盖输入验证、SQL 注入防护、XSS/CSRF 防御、
+      认证授权、敏感数据处理等关键安全领域。
+    keywords:
+      - security
+      - injection
+      - xss
+      - csrf
+      - authentication
+      - encryption
+
+  - id: UNI-TS
+    file: testing-standards.md
+    title: 测试标准规范
+    version: "1.0"
+    summary: >
+      测试金字塔策略、覆盖率要求、测试命名与隔离原则、
+      Mock 策略及 CI 集成要求,确保代码质量可量化、可持续。
+    keywords:
+      - testing
+      - unit-test
+      - integration-test
+      - coverage
+      - mock
+      - ci
+
+  - id: UNI-LS
+    file: logging-standards.md
+    title: 日志规范
+    version: "1.0"
+    summary: >
+      结构化日志格式(JSON)、日志级别使用标准、日志内容规则、
+      脱敏规则、性能日志及日志保留与轮转策略。
+    keywords:
+      - logging
+      - structured-log
+      - log-level
+      - masking
+      - retention
+
+  - id: UNI-EH
+    file: exception-handling.md
+    title: 异常处理规范
+    version: "1.0"
+    summary: >
+      全局异常处理模式、自定义异常层次结构、异常到 HTTP 状态码映射、
+      错误响应格式一致性、异常日志规则及常见反模式。
+    keywords:
+      - exception
+      - error-handling
+      - http-status
+      - global-handler
+      - anti-pattern
+
+  - id: UNI-RT
+    file: request-tracing.md
+    title: 请求链路与 AOP 规范
+    version: "1.0"
+    summary: >
+      traceId 生成与传播、spanId 子调用标识、MDC 集成、
+      AOP 切面设计(请求日志/耗时/参数)、跨服务链路传播与请求上下文设计。
+    keywords:
+      - tracing
+      - traceId
+      - spanId
+      - mdc
+      - aop
+      - request-context
+
+  - id: UNI-CS
+    file: change-scope-control.md
+    title: 变更范围控制规范
+    version: "1.0"
+    summary: >
+      变更边界声明与最小化修改原则、防重复造轮子（复用决策树）、
+      已有代码保护（测试/配置/基础设施）、项目清单自动维护、术语字典管理。
+    keywords:
+      - change-scope
+      - protection
+      - no-duplicate
+      - inventory
+      - glossary
+      - test-protection
+
+  - id: UNI-PB
+    file: performance-baseline.md
+    title: 性能基线规范
+    version: "1.0"
+    summary: >
+      全栈性能工程基线,覆盖 N+1 查询防护、数据库/HTTP 连接池管理、
+      API 响应时间分级、缓存命中率与穿透/雪崩防护、前端 Core Web Vitals、
+      慢查询监控、APM 集成、性能回归检测、并发安全及压力测试要求。
+    keywords:
+      - performance
+      - n-plus-one
+      - connection-pool
+      - cache
+      - latency
+      - apm
+      - benchmark
+      - frontend-performance

@@ -1,0 +1,891 @@
+# ============================================================
+# 规范体系元数据注册表 — Single Source of Truth
+# Enterprise Coding Standards Metadata Registry
+# ============================================================
+# 本文件是整套规范体系的唯一事实源（Single Source of Truth）。
+# 它描述每个规范模块的 ID、版本、文件路径、层级、依赖关系与状态。
+# 任何对 .md 规范文件的变更，都必须先在 registry.yaml 中体现。
+# registry.yaml 本身的变更属于"核心元数据变更"，需评审委员会审批。
+# ============================================================
+
+# ============================================================
+# System Metadata — 体系级元数据
+# ============================================================
+system:
+  name: "enterprise-coding-standards"
+  system_version: "2.0.0"
+  created: "2026-06-17"
+  last_updated: "2026-06-18"
+  governance_version: "1.0"
+
+# ============================================================
+# Module Registry — 模块注册表
+# ============================================================
+# 层级说明:
+#   L0        通用基础规范（所有项目强制遵守）
+#   L1        架构 Profile 规范（按项目架构类型选其一）
+#   L2        SPI 领域插件（按业务领域按需激活）
+#   skill     Skill 引擎定义文件
+#   guide     使用指南与操作手册
+#   meta      治理辅助文档
+#   schema    校验 Schema 定义
+# ============================================================
+modules:
+
+  # ==========================================================
+  # L0 Universal Specs — 通用基础规范（9 份，全项目强制加载）
+  # ==========================================================
+
+  - module_id: "naming-conventions"
+    version: "1.0"
+    file_path: "universal/naming-conventions.md"
+    level: L0
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "跨语言统一命名约定，覆盖 Java、TypeScript/JavaScript、数据库、API 端点、文件与包/模块命名规则"
+
+  - module_id: "git-workflow"
+    version: "1.0"
+    file_path: "universal/git-workflow.md"
+    level: L0
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Git 分支策略、Conventional Commits 提交格式、PR/MR 评审流程与 SemVer 标签管理"
+
+  - module_id: "api-design"
+    version: "1.1"
+    file_path: "universal/api-design.md"
+    level: L0
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "RESTful API 设计标准，包含 URL 约定、HTTP 方法语义、统一响应格式、错误码体系与版本管理"
+
+  - module_id: "security-baseline"
+    version: "1.0"
+    file_path: "universal/security-baseline.md"
+    level: L0
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "应用安全最低要求，覆盖输入验证、SQL 注入防护、XSS/CSRF 防御、认证授权与敏感数据处理"
+
+  - module_id: "testing-standards"
+    version: "1.1"
+    file_path: "universal/testing-standards.md"
+    level: L0
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "测试金字塔策略、覆盖率要求、测试命名与隔离原则、Mock 策略及 CI 集成要求"
+
+  - module_id: "logging-standards"
+    version: "1.0"
+    file_path: "universal/logging-standards.md"
+    level: L0
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "结构化日志格式（JSON）、日志级别使用标准、脱敏规则、性能日志及保留与轮转策略"
+
+  - module_id: "exception-handling"
+    version: "1.0"
+    file_path: "universal/exception-handling.md"
+    level: L0
+    depends_on:
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "全局异常处理模式、自定义异常层次、异常到 HTTP 状态码映射及错误响应格式一致性"
+
+  - module_id: "request-tracing"
+    version: "1.0"
+    file_path: "universal/request-tracing.md"
+    level: L0
+    depends_on:
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "traceId 生成与传播、spanId 子调用标识、MDC 集成、AOP 切面设计与跨服务链路传播"
+
+  - module_id: "change-scope-control"
+    version: "1.0"
+    file_path: "universal/change-scope-control.md"
+    level: L0
+    depends_on:
+      - "git-workflow"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "变更边界声明与最小化修改原则、防重复造轮子复用决策树、已有代码保护与术语字典管理"
+
+  - module_id: "performance-baseline"
+    version: "1.0"
+    file_path: "universal/performance-baseline.md"
+    level: L0
+    depends_on:
+      - "naming-conventions"
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "性能基线规范，覆盖 N+1 查询防护、分页与批量约束、前端渲染性能、数据结构选择与性能感知编码习惯"
+
+  - module_id: "ai-hallucination-defense"
+    version: "1.0"
+    file_path: "universal/ai-hallucination-defense.md"
+    level: L0
+    depends_on: []
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "AI 协作编码时的幻觉识别与防御规范，覆盖 5 类常见幻觉模式、4 个提示词模板、5 个验证步骤与复用检查联动机制"
+
+  # ==========================================================
+  # L1 Architecture Profiles — 架构 Profile 规范（原子包结构）
+  # 11 backend modules + 1 messaging + 13 frontend modules (frontend-vue: 5 common + 7 vue3 + 1 selfcheck)
+  # ==========================================================
+
+  # ----------------------------------------------------------
+  # Package: spring-boot-base — Spring Boot 基础框架 (1 spec)
+  # ----------------------------------------------------------
+
+  - module_id: "base-spring-boot"
+    version: "2.0"
+    file_path: "profiles/backend/spring-boot-base.md"
+    level: L1
+    package: "spring-boot-base"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Spring Boot 基础框架规范，定义项目骨架、自动配置约定与基础设施层标准"
+
+  # ----------------------------------------------------------
+  # Package: arch-mvc — MVC 架构模式 (1 spec)
+  # ----------------------------------------------------------
+
+  - module_id: "mvc-structure"
+    version: "2.0"
+    file_path: "profiles/backend/arch-mvc.md"
+    level: L1
+    package: "arch-mvc"
+    depends_on:
+      - "base-spring-boot"
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "MVC 三层架构规范，定义 controller/service/mapper 分层结构与目录组织"
+
+  # ----------------------------------------------------------
+  # Package: arch-ddd — DDD 领域驱动架构 (4 specs)
+  # ----------------------------------------------------------
+
+  - module_id: "ddd-structure"
+    version: "2.0"
+    file_path: "profiles/backend/ddd/arch-ddd.md"
+    level: L1
+    package: "arch-ddd"
+    depends_on:
+      - "base-spring-boot"
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "DDD 领域驱动架构核心规范，定义 COLA 四层分层结构与领域边界组织"
+
+  - module_id: "ddd-domain-model"
+    version: "2.0"
+    file_path: "profiles/backend/ddd/domain-model.md"
+    level: L1
+    package: "arch-ddd"
+    depends_on:
+      - "ddd-structure"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "领域模型设计规范，涵盖 Aggregate、Entity、ValueObject 建模原则与聚合边界划定"
+
+  - module_id: "ddd-event-patterns"
+    version: "2.0"
+    file_path: "profiles/backend/ddd/event-patterns.md"
+    level: L1
+    package: "arch-ddd"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "领域事件设计规范，包含 DomainEvent 定义、事件发布订阅模式与幂等处理"
+
+  - module_id: "ddd-cqrs"
+    version: "2.0"
+    file_path: "profiles/backend/ddd/cqrs.md"
+    level: L1
+    package: "arch-ddd"
+    depends_on:
+      - "ddd-domain-model"
+      - "ddd-event-patterns"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "CQRS 读写分离模式规范，定义 Command/Query 职责划分与数据流设计"
+
+  # ----------------------------------------------------------
+  # Package: persistence-* — 持久层技术规范 (5 specs)
+  # ----------------------------------------------------------
+
+  - module_id: "mbp-persistence"
+    version: "2.0"
+    file_path: "profiles/backend/persistence-mybatis-plus.md"
+    level: L1
+    package: "persistence-mybatis-plus"
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "MyBatis-Plus 持久层规范，涵盖 Mapper 设计、条件构造器、分页插件与代码生成器约定"
+
+  - module_id: "mb-persistence"
+    version: "2.0"
+    file_path: "profiles/backend/persistence-mybatis.md"
+    level: L1
+    package: "persistence-mybatis"
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "MyBatis 持久层规范，涵盖 XML Mapper 设计、动态 SQL、插件机制与分页查询约定"
+
+  - module_id: "jpa-persistence"
+    version: "2.0"
+    file_path: "profiles/backend/persistence-jpa.md"
+    level: L1
+    package: "persistence-jpa"
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "JPA/Hibernate 持久层规范，涵盖 Entity 映射、Repository 设计、事务管理与查询优化"
+
+  - module_id: "redis-persistence"
+    version: "2.0"
+    file_path: "profiles/backend/persistence-redis.md"
+    level: L1
+    package: "persistence-redis"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Redis 缓存与数据结构规范，涵盖 Key 命名约定、序列化策略、过期策略与分布式锁模式"
+
+  - module_id: "es-persistence"
+    version: "2.0"
+    file_path: "profiles/backend/persistence-elasticsearch.md"
+    level: L1
+    package: "persistence-elasticsearch"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Elasticsearch 持久层规范，涵盖 Index 设计、Mapping 定义、查询 DSL 与数据同步策略"
+
+  # ----------------------------------------------------------
+  # Package: messaging-kafka — Kafka 消息队列 (1 spec)
+  # ----------------------------------------------------------
+
+  - module_id: "messaging-kafka"
+    version: "1.0"
+    file_path: "profiles/backend/messaging-kafka.md"
+    level: L1
+    package: "messaging-kafka"
+    depends_on:
+      - "naming-conventions"
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Kafka 消息队列规范，覆盖 Topic 命名、消息信封格式、生产者/消费者约定、幂等消费、死信队列与事务消息"
+
+  # ----------------------------------------------------------
+  # Package: messaging-rocketmq — RocketMQ 消息队列 (1 spec, 与 Kafka 互斥)
+  # ----------------------------------------------------------
+
+  - module_id: "messaging-rocketmq"
+    version: "1.0"
+    file_path: "profiles/backend/messaging-rocketmq.md"
+    level: L1
+    package: "messaging-rocketmq"
+    depends_on:
+      - "naming-conventions"
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "RocketMQ 消息队列规范，覆盖 Topic/Tag 设计、消息信封、生产者/消费者、事务消息、顺序消息、延迟消息与监控。与 messaging-kafka 互斥"
+
+  # ----------------------------------------------------------
+  # Package: testing-jvm — JVM 测试框架约定 (1 spec, L1 框架层)
+  # ----------------------------------------------------------
+
+  - module_id: "testing-jvm"
+    version: "1.0"
+    file_path: "profiles/backend/testing-jvm.md"
+    level: L1
+    package: "testing-jvm"
+    depends_on:
+      - "testing-strategy"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "JVM 测试框架约定，覆盖 JUnit 5 生命周期、AssertJ 断言、Mockito 5 用法、Spring Boot 测试切片、TestContainers 集成测试、参数化测试与反模式清单。是 L0 testing-strategy 的 Java/JVM 落地层"
+
+  # ----------------------------------------------------------
+  # Package: db-migration — 数据库迁移 (1 spec, Flyway / Liquibase)
+  # ----------------------------------------------------------
+
+  - module_id: "db-migration"
+    version: "1.0"
+    file_path: "profiles/backend/db-migration.md"
+    level: L1
+    package: "db-migration"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "数据库 schema 迁移规范，覆盖 Flyway/Liquibase 选型、版本号规则、迁移脚本编写、回滚策略、多环境执行与破坏性变更流程"
+
+  # ----------------------------------------------------------
+  # Package: devops-cicd — DevOps 与 CI/CD (1 spec, L1 流程落地层)
+  # ----------------------------------------------------------
+
+  - module_id: "devops-cicd"
+    version: "1.0"
+    file_path: "profiles/backend/devops-cicd.md"
+    level: L1
+    package: "devops-cicd"
+    depends_on:
+      - "git-workflow"
+      - "security-baseline"
+    status: active
+    last_modified: "2026-06-19"
+    last_modified_by: "system"
+    description: "DevOps 与 CI/CD 规范，覆盖 CI 流水线 6 阶段、Docker 多阶段构建、K8s 部署健康检查、4 个黄金信号告警与镜像/部署检查清单"
+
+  # ----------------------------------------------------------
+  # Package: api-design — RESTful API 设计规范 (1 spec, L1 接口契约层)
+  # ----------------------------------------------------------
+
+  - module_id: "api-design"
+    version: "2.0"
+    file_path: "profiles/backend/api-design.md"
+    level: L1
+    package: "api-design"
+    depends_on:
+      - "naming-conventions"
+      - "exception-handling"
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "API 设计规范，覆盖 RESTful URL 设计、统一响应格式、HTTP 状态码、业务错误码体系、版本管理与 OpenAPI 契约"
+
+  # ----------------------------------------------------------
+  # Package: error-handling — 错误处理与日志规范 (1 spec, L1 异常处理层)
+  # ----------------------------------------------------------
+
+  - module_id: "error-handling"
+    version: "1.0"
+    file_path: "profiles/backend/error-handling.md"
+    level: L1
+    package: "error-handling"
+    depends_on:
+      - "exception-handling"
+      - "logging-standards"
+      - "request-tracing"
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "错误处理与日志规范，覆盖 8 种错误分类、ErrorCode 枚举、BizException 异常类、全局异常处理器、链路追踪集成与结构化日志规范"
+
+  # ----------------------------------------------------------
+  # Package: security-practices — 安全实践规范 (1 spec, L1 安全防护层)
+  # ----------------------------------------------------------
+
+  - module_id: "security-practices"
+    version: "1.0"
+    file_path: "profiles/backend/security-practices.md"
+    level: L1
+    package: "security-practices"
+    depends_on:
+      - "security-baseline"
+      - "api-design"
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "安全实践规范，覆盖 SQL 注入/XSS/CSRF 防护、JWT 认证、BCrypt 密码哈希、RBAC 权限模型、安全响应头与安全审计日志"
+
+  # ----------------------------------------------------------
+  # Package: frontend-vue — Vue 前端架构 (common/ + vue3/ sub-directories, Vue 3 only)
+  # ----------------------------------------------------------
+
+  - module_id: "frontend-vue-overview"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/00-overview.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "frontend-vue 包元信息 + 子文件清单"
+
+  - module_id: "fe-architecture"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/common/architecture.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "三层架构、依赖方向、5 个文件定位决策树、路由规范（Vue 通用）"
+
+  - module_id: "fe-structure"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/common/structure.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "fe-architecture"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "目录布局、就近原则、Barrel exports、导入顺序、TS 严格模式（Vue 通用）"
+
+  - module_id: "fe-api"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/common/api-conventions.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "fe-architecture"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "API 5 件套铁律、错误处理 try/catch/finally 模板（Vue 通用）"
+
+  - module_id: "fe-type-system"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/common/type-system.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "BaseEntity 基座类型、业务实体 5 件套（Vue 通用）"
+
+  - module_id: "fe-i18n"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/common/i18n.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "naming-conventions"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "4 段式 Key 命名空间、语言包结构、铁律（Vue 通用）"
+
+  - module_id: "fe-vue3-script-setup"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/script-setup.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-architecture"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 script setup 10 步顺序、defineProps/Emits/Expose 规则、命名规范"
+
+  - module_id: "fe-vue3-component"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/component.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-vue3-script-setup"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 组件设计：Props 接口、组件体量、组合模式、a11y、样式隔离"
+
+  - module_id: "fe-vue3-state"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/state.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-architecture"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 状态管理：4 类状态（本地/共享/服务端/URL）、跨组件通信优先级、Pinia"
+
+  - module_id: "fe-vue3-element-plus"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/ui-element-plus.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-vue3-component"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 + Element Plus 必填属性、弹窗/表单/表格/按钮/卡片/树/描述规则"
+
+  - module_id: "fe-vue3-encapsulated"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/encapsulated.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-vue3-element-plus"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "10 类强制封装场景、组件选用决策树（{EncapsulatedXxx} 占位符，项目自定义前缀）"
+
+  - module_id: "fe-vue3-page-patterns"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/page-patterns.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-vue3-encapsulated"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 页面模式：页面命名铁律、flex 三段式、左树右表、PageHeader/LeftTreeLayout"
+
+  - module_id: "fe-vue3-design-tokens"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/vue3/design-tokens.md"
+    level: L1
+    package: "frontend-vue(vue3)"
+    depends_on:
+      - "fe-vue3-component"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Vue 3 设计 Token：颜色/字体/间距/圆角/阴影、p-3 间距硬约束"
+
+  - module_id: "fe-selfcheck"
+    version: "2.0"
+    file_path: "profiles/frontend/vue/selfcheck.md"
+    level: L1
+    package: "frontend-vue"
+    depends_on:
+      - "fe-vue3-element-plus"
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "AI 编码自检清单 99 项（命名/类型/位置/API/路由/i18n/UI/设计 Token/体量/script setup/状态）"
+
+  # ==========================================================
+  # L2 SPI Plugins — 领域插件（按业务领域按需激活）
+  # ==========================================================
+
+  - module_id: "spi-data-governance"
+    version: "1.0"
+    file_path: "spi/data-governance/domain-spec.md"
+    level: L2
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+      - "logging-standards"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "数据治理领域规范，涵盖数据质量、元数据管理、数据血缘与数据分类规则"
+
+  - module_id: "spi-mdm-frontend"
+    version: "1.0"
+    file_path: "spi/mdm-frontend/domain-spec.md"
+    level: L2
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+      - "frontend-vue-overview"
+      - "fe-vue3-encapsulated"
+      - "fe-vue3-element-plus"
+      - "fe-vue3-page-patterns"
+      - "fe-vue3-design-tokens"
+    status: active
+    last_modified: "2026-06-25"
+    last_modified_by: "lemostic"
+    description: "MDM 主数据产品前端领域规范：基于 frontend-vue L1 通用规范，补充 Tp-* 11 类封装组件 API、@mdm/* 路径别名与 monorepo 目录布局、useCrudList/useImportExport/useFormValidation 业务 Composable、statusTagType 6 状态标准映射、MDM BaseEntity（强制 name + pageNum/list 分页字段）、TpPagination 视觉规格（2px 圆角/48px 高）、ModelCard 视觉规格（4px 圆角/36×36 蓝色图标框）"
+
+  - module_id: "spi-template"
+    version: "1.0"
+    file_path: "spi/_template/domain-spec.md"
+    level: L2
+    depends_on:
+      - "naming-conventions"
+      - "api-design"
+    status: inactive
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "SPI 领域插件开发模板，包含标准占位符结构与激活条件配置示例"
+
+  # ==========================================================
+  # Skill Engine — Skill 引擎定义文件
+  # ==========================================================
+
+  - module_id: "skill-definition"
+    version: "1.1"
+    file_path: "skill/SKILL.md"
+    level: skill
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Skill 引擎主定义文件，声明 AI Agent 的规范注入流程与行为规则"
+
+  - module_id: "routing-rules"
+    version: "1.1"
+    file_path: "skill/routing-rules.yaml"
+    level: skill
+    depends_on:
+      - "skill-definition"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "规范路由规则配置，定义项目指纹到规范模块的匹配逻辑与加载策略"
+
+  # ==========================================================
+  # Guides — 使用指南与操作手册（5 份）
+  # ==========================================================
+
+  - module_id: "guide-getting-started"
+    version: "1.0"
+    file_path: "guides/getting-started.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "规范体系快速入门指南，引导新用户完成接入配置与 spec-manifest.yaml 设置"
+
+  - module_id: "guide-how-to-add-spec"
+    version: "1.0"
+    file_path: "guides/how-to-add-spec.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "新增规范模块操作指南，说明从创建提案到发布合并的完整流程"
+
+  - module_id: "guide-how-to-write-spi"
+    version: "1.0"
+    file_path: "guides/how-to-write-spi.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "SPI 领域插件开发指南，指导团队编写符合规范的 L2 领域扩展"
+
+  - module_id: "guide-skill-config"
+    version: "1.0"
+    file_path: "guides/skill-config-guide.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "Skill 引擎配置指南，说明路由规则调整与指纹匹配参数调优方法"
+
+  - module_id: "guide-design-review-checklist"
+    version: "1.0"
+    file_path: "guides/design-review-checklist.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "设计评审检查清单，提供架构评审前的系统化校验项与最佳实践参考"
+
+  - module_id: "guide-code-review-checklist"
+    version: "1.0"
+    file_path: "guides/code-review-checklist.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "Code Review 清单，覆盖命名/类型/API/UI/布局/后端/消息队列/安全/性能/测试/AI 协作/文档 14 大类共 100+ 检查项，是 PR 评审阶段的硬性 + 建议项检查表"
+
+  - module_id: "guide-debugging"
+    version: "1.0"
+    file_path: "guides/debugging-guide.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "调试与问题排查指南，定义 4 阶段调试流程（问题定义/信息收集/根因分析/验证修复）与严重程度分级，配套 P0-P3 响应时间标准与跨组件排查操作手册"
+
+  - module_id: "guide-requirement-analysis"
+    version: "1.0"
+    file_path: "guides/requirement-analysis-guide.md"
+    level: guide
+    depends_on: []
+    status: active
+    last_modified: "2026-06-26"
+    last_modified_by: "system"
+    description: "需求梳理与 DESIGN.md 编写指南，定义 brainstorming 技能工作流、需求分析 5 维度、DESIGN.md 模板与需求文档输出模板"
+
+  # ==========================================================
+  # Meta — 规范治理辅助文档（2 份）
+  # ==========================================================
+
+  - module_id: "meta-versioning-strategy"
+    version: "1.0"
+    file_path: "meta/versioning-strategy.md"
+    level: meta
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "版本管理策略文档，定义体系版本与模块版本的升降规则及 SemVer 适配方案"
+
+  - module_id: "meta-dependency-matrix"
+    version: "1.0"
+    file_path: "meta/dependency-matrix.md"
+    level: meta
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "模块依赖关系矩阵，可视化展示各规范模块间的上下游依赖拓扑"
+
+  - module_id: "meta-architecture"
+    version: "2.0"
+    file_path: "ARCHITECTURE.md"
+    level: meta
+    depends_on: []
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "规范体系顶层架构建模文档，定义三层引导链、原子化包结构与加载引擎设计"
+
+  - module_id: "meta-optimization-plan"
+    version: "1.0"
+    file_path: "meta/optimization-plan-and-boundary-guide.md"
+    level: meta
+    depends_on: []
+    status: active
+    last_modified: "2026-06-18"
+    last_modified_by: "system"
+    description: "规范体系优化计划与外部技能包边界界定指南，含差异矩阵、调用链隔离规则、组合策略与细粒度任务拆解表"
+
+  # ==========================================================
+  # Schema — 校验 Schema 定义
+  # ==========================================================
+
+  - module_id: "spec-manifest-schema"
+    version: "1.0"
+    file_path: "spec-manifest.schema.yaml"
+    level: schema
+    depends_on: []
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "spec-manifest.yaml 校验 Schema（JSON Schema Draft-07），定义项目规范清单的合法结构"
+
+  # ==========================================================
+  # Bootstrap — Agent 接入层（引导链 Layer 0）
+  # 连接规范体系与外部 AI 编程工具的桥梁
+  # ==========================================================
+
+  - module_id: "bootstrap-readme"
+    version: "1.0"
+    file_path: "README.md"
+    level: bootstrap
+    depends_on:
+      - "skill-definition"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "规范体系概述与快速引导文档，包含三级引导链图解、Hello World 接入流程和支持的 AI 工具矩阵"
+
+  - module_id: "bootstrap-script"
+    version: "1.0"
+    file_path: "governance/scripts/bootstrap.sh"
+    level: bootstrap
+    depends_on:
+      - "skill-definition"
+      - "routing-rules"
+      - "spec-manifest-schema"
+    status: active
+    last_modified: "2026-06-17"
+    last_modified_by: "system"
+    description: "多 AI Agent 一键注入脚本，自动为 Claude Code/Cursor/Codex/Windsurf/Cline 生成接入配置，创建 .spec/ 项目指纹目录"
+
+# ============================================================
+# Registry Summary — 注册表统计
+# ============================================================
+# L0 Universal Specs:     11 modules (all active, +1 ai-hallucination-defense)
+# L1 Architecture Profiles: 31 modules (+3: api-design, error-handling, security-practices)
+#   - spring-boot-base:      1 spec  (profiles/backend/)
+#   - arch-mvc:              1 spec  (profiles/backend/)
+#   - arch-ddd:              4 specs (profiles/backend/ddd/)
+#   - persistence-*:         5 specs (profiles/backend/)
+#   - messaging-kafka:       1 spec  (profiles/backend/)
+#   - messaging-rocketmq:    1 spec  (profiles/backend/, conflicts with kafka)
+#   - testing-jvm:           1 spec  (profiles/backend/, Java/JVM testing framework)
+#   - db-migration:          1 spec  (profiles/backend/, Flyway/Liquibase)
+#   - devops-cicd:           1 spec  (profiles/backend/, CI/CD pipeline)
+#   - api-design:            1 spec  (profiles/backend/, RESTful API design)
+#   - error-handling:        1 spec  (profiles/backend/, exception + logging)
+#   - security-practices:    1 spec  (profiles/backend/, XSS/CSRF/SQL/JWT)
+#   - frontend-vue:  5 common + 7 vue3 + 1 selfcheck = 13 specs (vue2 removed)
+# L2 SPI Plugins:         3  modules (2 active, 1 inactive template)
+# Skill Engine:           2  modules (all active)
+# Guides:                 8  modules (all active, +1 requirement-analysis-guide)
+# Meta:                   4  modules (all active, +1 optimization-plan)
+# Schema:                 1  module  (active)
+# Bootstrap:              2  modules (all active)
+# ---------------------------------------------------------
+# Total:                 64  registered modules
+# ============================================================

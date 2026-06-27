@@ -1,0 +1,181 @@
+# ============================================================
+# 角色权限矩阵配置
+# 定义规范体系中各角色的操作边界与审批要求
+# ============================================================
+
+version: "1.0"
+
+# ============================================================
+# 角色定义
+# ============================================================
+roles:
+
+  contributor:
+    display_name: "贡献者"
+    description: "普通开发人员，可提交 patch 级变更提案"
+    capabilities:
+      - submit_patch_proposal          # 提交补丁级提案
+      - comment_on_proposals           # 评论提案
+      - read_registry                  # 查看 registry.yaml
+      - read_all_specs                 # 阅读所有规范文件
+    restrictions:
+      - cannot_submit_minor_proposal   # 不可直接提交 minor 提案（需代交）
+      - cannot_submit_major_proposal   # 不可提交 major 提案
+      - cannot_approve_pr              # 不可审批 PR
+      - cannot_modify_registry         # 不可修改 registry.yaml
+      - cannot_edit_spec_files         # 不可直接编辑 .md 规范文件
+
+  maintainer:
+    display_name: "维护者"
+    description: "规范日常维护人员，可审批 patch/minor 并执行合并"
+    inherits: contributor
+    capabilities:
+      - submit_minor_proposal          # 提交次版本提案
+      - approve_patch_pr               # 审批 patch 级 PR（1票）
+      - approve_minor_pr               # 审批 minor 级 PR（需2票）
+      - merge_approved_pr              # 合并已审批的 PR
+      - modify_validation_rules        # 修改校验规则配置
+      - run_health_check               # 运行体系健康巡检
+    restrictions:
+      - cannot_submit_major_proposal   # 不可直接提交 major 提案
+      - cannot_approve_major_pr        # 不可审批 major 级 PR
+      - cannot_modify_governance       # 不可修改治理层文件
+
+  reviewer:
+    display_name: "评审委员"
+    description: "评审委员会成员，负责审批 major 变更"
+    inherits: contributor
+    capabilities:
+      - submit_minor_proposal
+      - submit_major_proposal          # 提交主版本提案
+      - approve_major_pr               # 审批 major 级 PR
+      - vote_governance_changes        # 表决治理层变更
+      - read_all_specs
+    restrictions:
+      - cannot_execute_merge           # 不可执行合并（由 Lead 执行）
+      - cannot_modify_registry         # 不可直接修改 registry
+      - cannot_edit_spec_files         # 不可直接编辑 .md
+
+  lead_maintainer:
+    display_name: "首席维护者"
+    description: "评审委员会主席，唯一可执行 major 合并的角色"
+    inherits: maintainer
+    capabilities:
+      - submit_major_proposal
+      - approve_major_pr
+      - execute_major_merge            # 执行 major 级合并
+      - modify_registry                # 修改 registry.yaml
+      - modify_permissions             # 修改 permissions.yaml
+      - modify_governance              # 修改 GOVERNANCE.md
+      - assign_roles                   # 分配角色
+      - force_health_check             # 强制全量巡检
+    restrictions:
+      - must_have_committee_approval   # major 变更必须有委员会决议
+      - cannot_edit_spec_files         # 仍不可直接编辑 .md（必须通过提案）
+
+# ============================================================
+# 操作 → 角色映射
+# ============================================================
+operations:
+
+  # --- 提案提交 ---
+  submit_proposal_patch:
+    allowed_roles: [contributor, maintainer, reviewer, lead_maintainer]
+    auto_assign_reviewers: true
+
+  submit_proposal_minor:
+    allowed_roles: [maintainer, reviewer, lead_maintainer]
+    note: "Contributor 可编写提案文件但需 Maintainer 代为创建 PR"
+
+  submit_proposal_major:
+    allowed_roles: [maintainer, reviewer, lead_maintainer]
+    requires_committee_notice: true     # 必须通知评审委员会
+
+  # --- PR 审批 ---
+  approve_patch:
+    min_approvals: 1
+    allowed_roles: [maintainer, lead_maintainer]
+
+  approve_minor:
+    min_approvals: 2
+    allowed_roles: [maintainer, lead_maintainer]
+
+  approve_major:
+    min_approvals: -1                  # 全员通过（-1 表示全员）
+    allowed_roles: [reviewer, lead_maintainer]
+    requires_meeting: true             # 必须经评审会议
+
+  # --- PR 合并 ---
+  merge:
+    allowed_roles: [maintainer, lead_maintainer]
+    preconditions:
+      - all_ci_checks_pass             # CI 校验全部通过
+      - required_approvals_met         # 审批票数已满足
+      - no_unresolved_comments         # 无未解决的评论
+      - registry_updated               # registry.yaml 已更新
+
+  # --- 治理层操作 ---
+  modify_registry:
+    allowed_roles: [lead_maintainer]
+    requires_committee_approval: true
+    protected: true
+
+  modify_permissions:
+    allowed_roles: [lead_maintainer]
+    requires_committee_approval: true
+    requires_supermajority: true       # 2/3 以上委员同意
+    protected: true
+
+  modify_governance:
+    allowed_roles: [lead_maintainer]
+    requires_committee_approval: true
+    requires_supermajority: true
+    protected: true
+
+  modify_validation_rules:
+    allowed_roles: [maintainer, lead_maintainer]
+    requires_committee_approval: false
+
+# ============================================================
+# 受保护文件清单（禁止直接编辑）
+# ============================================================
+protected_files:
+  # 治理层核心文件
+  - path: "governance/GOVERNANCE.md"
+    reason: "治理框架总纲，变更需评审委员会决议"
+  - path: "governance/registry.yaml"
+    reason: "元数据注册表，体系单一事实源"
+  - path: "governance/permissions.yaml"
+    reason: "权限矩阵，变更需超级多数同意"
+
+  # 架构纲领文件
+  - path: "ARCHITECTURE.md"
+    reason: "顶层架构建模，影响全局"
+  - path: "PLAN.md"
+    reason: "架构设计计划"
+
+  # 引擎核心文件
+  - path: "skill/SKILL.md"
+    reason: "Skill 引擎定义，修改影响所有项目"
+  - path: "skill/routing-rules.yaml"
+    reason: "路由规则，修改影响规范加载"
+  - path: "spec-manifest.schema.yaml"
+    reason: "Schema 定义，修改影响 manifest 校验"
+
+# ============================================================
+# 审计规则
+# ============================================================
+audit:
+  # 每次操作记录到 CHANGELOG.md
+  log_all_changes: true
+  log_target: "governance/CHANGELOG.md"
+
+  # 记录操作人、时间、变更类型、影响范围
+  log_fields:
+    - timestamp
+    - author
+    - role
+    - proposal_id
+    - change_type
+    - affected_modules
+    - approval_status

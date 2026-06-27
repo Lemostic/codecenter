@@ -1,0 +1,53 @@
+# ============================================================
+# 变更提案模板
+# 所有规范变更必须通过此模板提交
+# 文件命名：PROP-YYYY-NNNN-简述.proposal.yaml
+# ============================================================
+
+proposal:
+  # --- 基本信息 ---
+  id: "PROP-{{YEAR}}-{{SEQUENCE}}"     # 唯一编号，如 PROP-2026-0042
+  type: "patch"                         # patch | minor | major
+  author: "{{contributor_id}}"          # 提案人 Git 用户名
+  date: "{{ISO_DATE}}"                  # 提交日期
+  status: "draft"                       # draft → review → approved → merged | rejected
+
+  # --- 变更描述 ---
+  summary: ""                           # 一句话描述变更目的
+  rationale: ""                         # 详细说明变更原因与背景
+
+  # --- 变更清单 ---
+  changes:
+    - target: ""                        # 目标文件路径（相对于 docs/）
+      action: "modify"                  # modify | create | deprecate | archive
+      rule_ids: []                      # 受影响的规则 ID 列表
+      description: ""                   # 具体修改内容描述
+      before: ""                        # 修改前摘要（modify 时必填）
+      after: ""                         # 修改后摘要（modify 时必填）
+
+  # --- 影响评估 ---
+  impact:
+    affected_specs: []                  # 受影响的规范模块 ID
+    affected_profiles: []               # 受影响的架构 Profile
+    breaking_change: false              # 是否包含破坏性变更
+    migration_required: false           # 是否需要项目侧迁移
+    migration_guide: ""                 # 迁移指南（如需要）
+
+  # --- 版本影响 ---
+  version_bump:
+    - module_id: ""                     # 受影响的模块 ID
+      current_version: ""               # 当前版本
+      new_version: ""                   # 变更后版本
+
+  # --- 审批信息 ---
+  review:
+    required_approvals: 1               # patch=1, minor=2, major=全员
+    reviewers: []                       # 建议评审人
+    committee_approval: false           # major 变更设为 true
+    committee_meeting_date: ""          # 评审会议日期（major 时必填）
+
+  # --- 附件 ---
+  attachments:
+    related_issues: []                  # 关联的 Issue 编号
+    references: []                      # 参考文档链接
+    screenshots: []                     # 截图路径

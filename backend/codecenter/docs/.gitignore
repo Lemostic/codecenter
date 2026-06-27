@@ -1,0 +1,13 @@
+# 依赖（运行时随 vendor 脚本本地加载，源码不进版本库）
+site/vendor/node_modules/
+site/vendor/package-lock.json
+site/vendor/package.json
+
+# Claude / OpenWolf 工具状态
+.claude/
+.wolf/
+
+# 临时文件
+*.tmp
+.DS_Store
+Thumbs.db

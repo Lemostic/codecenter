@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:codecenter;DB_CLOSE_DELAY=-1;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: never
+  data:
+    redis:
+      host: localhost
+      port: 16379
+      password: redis_PDJtRf
+
+cosid:
+  enabled: false
+
+logging:
+  level:
+    com.meritdata.mdm: DEBUG

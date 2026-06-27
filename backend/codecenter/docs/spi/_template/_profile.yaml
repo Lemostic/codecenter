@@ -1,0 +1,42 @@
+# ============================================================
+# SPI 领域插件配置模板
+# 使用前请将所有 {{variable}} 占位符替换为实际值
+# ============================================================
+
+# 插件版本号，遵循语义化版本（MAJOR.MINOR）
+version: "1.0"
+
+# 全局唯一标识，格式固定为 spi-{domain_name}
+profile_id: "spi-{{domain_name}}"
+
+# 领域标识符，须与 spec-manifest.yaml 中 fingerprint.domains 数组的值一致
+domain: "{{domain_name}}"
+
+# 该领域规范的一句话描述，说明覆盖的核心场景
+description: "{{domain_description}}"
+
+# 激活条件配置
+activation:
+  # 项目 manifest 中必须包含此领域标签，插件才会被 Skill 引擎加载
+  requires_domain: "{{domain_tag}}"
+
+# 依赖的基础规范模块（仅可依赖 L0/L1 层规范，禁止依赖其他 SPI 插件）
+# 以下为推荐的基础依赖，可根据实际需要增删
+depends_on:
+  - naming-conventions
+  - api-design
+
+# ============================================================
+# 可选字段（取消注释后使用）
+# ============================================================
+
+# 插件状态：active（默认）| deprecated
+# status: "active"
+
+# 废弃说明（仅在 status 为 deprecated 时填写）
+# deprecation_note: "该领域已被 {{new_domain}} 替代，请参考 spi-{{new_domain}} 插件"
+
+# 标签列表，用于 Skill 引擎关键词匹配时辅助定位
+# tags:
+#   - "{{tag_1}}"
+#   - "{{tag_2}}"

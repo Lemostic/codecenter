@@ -1,0 +1,80 @@
+# ============================================================
+# GitHub Actions: 规范体系自动校验 CI/CD
+# 在每次 PR 提交时自动运行 validate-spec.sh 校验脚本
+# ============================================================
+
+name: Spec Validation Pipeline
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'docs/**'
+  push:
+    branches: [main]
+  schedule:
+    # 每周一定时全量巡检
+    - cron: '0 9 * * 1'
+
+jobs:
+  validate:
+    name: Validate Specification System
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # 需要 diff 信息用于受保护文件检查
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml jsonschema
+
+      - name: Run validate-spec.sh (PR mode)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          cd docs
+          bash governance/scripts/validate-spec.sh --ci
+
+      - name: Run validate-spec.sh (full scan)
+        if: github.event_name == 'push' || github.event_name == 'schedule'
+        run: |
+          cd docs
+          bash governance/scripts/validate-spec.sh --full --ci
+
+      - name: Post validation summary
+        if: always()
+        run: |
+          echo "================================================"
+          echo "  规范体系校验报告"
+          echo "================================================"
+          echo "  PR: #${{ github.event.number }}"
+          echo "  Author: ${{ github.actor }}"
+          echo "  Trigger: ${{ github.event_name }}"
+          echo "  Mode: ${{ github.event_name == 'pull_request' && 'PR 增量' || '全量巡检' }}"
+          echo "================================================"
+          echo ""
+          echo "校验脚本覆盖 14 项规则:"
+          echo "  V-001  提案文件存在性"
+          echo "  V-002  YAML 语法检查"
+          echo "  V-003  冲突标记检查"
+          echo "  V-101  registry 路径完整性"
+          echo "  V-102  Profile 模块完整性"
+          echo "  V-103  路由规则完整性"
+          echo "  V-104  规则 ID 唯一性"
+          echo "  V-105  双向引用一致性"
+          echo "  V-201  版本号合规"
+          echo "  V-202  依赖完整性"
+          echo "  V-203  CHANGELOG 条目"
+          echo "  V-301  受保护文件检查"
+          echo "  V-302  占位符完整性"
+          echo "  V-303  权限校验"

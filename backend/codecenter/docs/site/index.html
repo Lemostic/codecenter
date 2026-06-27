@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#09090b" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="一套面向 AI 编程助手的、可自动加载、可自由组合、可协作迭代的工程化编码标准。" />
+<meta property="og:title" content="企业编码规范体系 · 全景" />
+<meta property="og:description" content="让规范成为 AI 自动遵循的程序：可被 AI 编程助手自动解析、按需加载、动态组装的工程化编码标准。" />
+<meta property="og:type" content="website" />
+<title>企业编码规范体系 · 全景</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2338bdf8'/><text x='50%25' y='52%25' text-anchor='middle' dominant-baseline='middle' font-family='ui-monospace,Menlo,monospace' font-size='18' font-weight='800' fill='%23001018'>S</text></svg>" />
+<link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+<!-- 噪点纹理覆盖层 -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- 跳到主内容（键盘 a11y） -->
+<a class="skip-link" href="#main">跳到主内容</a>
+
+<!-- 滚动进度条 -->
+<div id="scrollProgress" aria-hidden="true"></div>
+
+<!-- 返回顶部 -->
+<button id="backToTop" type="button" aria-label="返回顶部">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ===================== 导航 ===================== -->
+<nav id="nav">
+  <div class="brand">
+    <div class="logo">S</div>
+    <div>企业编码规范体系<small>Enterprise Coding Standards</small></div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#boot">加载机制</a>
+    <a class="nav-link" href="#layers">三层模型</a>
+    <a class="nav-link" href="#simulator">匹配模拟器</a>
+    <a class="nav-link" href="#engine">引擎流程</a>
+    <a class="nav-link" href="#packages">架构包</a>
+    <a class="nav-link" href="#governance">迭代管理</a>
+    <a class="nav-link" href="#quickstart">快速接入</a>
+  </div>
+</nav>
+
+<!-- ===================== Hero ===================== -->
+<main id="main">
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge"><span class="pulse"></span>面向 AI 编程助手的规范运行时</span>
+      <h1>让规范成为<br /><span class="grad">AI 自动遵循的程序</span></h1>
+      <p class="lead">
+        这不是一份给人读的 Wiki 或 PDF，而是一套<b>可被 AI 编程助手自动解析、按需加载、动态组装</b>的工程化编码标准。
+        开发者只需一次配置，AI 就会在每次写代码时自动读取项目信息、匹配到正确的规范子集，并在生成代码时主动遵循。
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#simulator">▶ 体验指纹匹配模拟器</a>
+        <a class="btn btn-ghost" href="#boot">了解工作原理</a>
+      </div>
+      <div class="hero-quote">
+        <span class="q">「规范不是写给人看的文档，而是写给 AI 执行的程序。」</span>
+        <span class="who">本体系的核心设计理念</span>
+      </div>
+    </div>
+
+    <div class="term-card">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="ttl">spec-engine · 自动遵循团队规范</span>
+      </div>
+      <div class="term-body">
+        <div class="term-line t-note"># 你不需要记住任何规范</div>
+        <div class="term-line t-cmd">$ 你：帮我建一个订单的核心业务对象</div>
+        <div class="term-line t-out">AI 正在读取项目指纹…</div>
+        <div class="term-line t-out">→ 命中 DDD 四层架构</div>
+        <div class="term-line t-out">→ 按需加载「领域模型」规范</div>
+        <div class="term-line t-ok">✓ 生成聚合根 + 实体 + 仓储接口</div>
+        <div class="term-line t-ok">✓ 命名/异常/日志全部符合团队标准</div>
+        <div class="term-line t-cmd" style="color:var(--c-l1)">▋</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== 三级加载机制 ===================== -->
+<section class="section" id="boot">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">工作原理 · 三级加载</span>
+      <h2 class="title">像操作系统启动一样，<em>逐级加载</em>规范</h2>
+      <p class="subtitle">借鉴计算机从固件到内核的链式启动思路：入口层只做最小引导，把复杂度留给下一层。每一层只做一件事。</p>
+    </div>
+
+    <div class="boot-wrap reveal">
+      <div class="boot-level">
+        <div class="lv-no">1</div>
+        <div>
+          <div class="lv-title">入口层 · 一行引导代码</div>
+          <div class="lv-desc">项目根目录的 CLAUDE.md / .cursorrules，只做一件事：告诉 AI 去哪里找规范引擎。</div>
+        </div>
+        <div class="lv-tag">~1 行</div>
+      </div>
+      <div class="boot-arrow">▼ 自动加载</div>
+      <div class="boot-level">
+        <div class="lv-no">2</div>
+        <div>
+          <div class="lv-title">路由引擎 · 读懂你的项目</div>
+          <div class="lv-desc">读取项目自述卡（记录用什么架构、什么技术栈）→ 匹配架构类型 → 决定加载哪些规范。</div>
+        </div>
+        <div class="lv-tag">SKILL.md</div>
+      </div>
+      <div class="boot-arrow">▼ 按需加载</div>
+      <div class="boot-level">
+        <div class="lv-no">3</div>
+        <div>
+          <div class="lv-title">规范库 · 只在需要时出现</div>
+          <div class="lv-desc">通用规范（始终加载）+ 架构方案（按类型选一）+ 领域插件（按需激活），不会一次性塞满上下文。</div>
+        </div>
+        <div class="lv-tag">L0 / L1 / L2</div>
+      </div>
+    </div>
+
+    <div class="boot-cta">
+      <button class="btn btn-ghost" id="bootTrigger">▶ 模拟链式加载</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 三层规范模型 ===================== -->
+<section class="section" id="layers" style="background:linear-gradient(180deg, transparent, rgba(255,255,255,.012), transparent);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">规范架构 · 三层模型</span>
+      <h2 class="title">从<em>底线规则</em>到<em>领域专长</em>，热插拔组合</h2>
+      <p class="subtitle">三层分离，借鉴插件化思想：底层是稳定的地基，中层是可替换的模块，顶层是可添加的能力。团队只激活自己需要的部分。</p>
+    </div>
+
+    <!-- Bento 布局：L0 横跨顶部，L1 与 L2 下方不对称分列 -->
+    <div class="layers">
+      <!-- L0 全宽 -->
+      <div class="layer-card l0 reveal" data-stagger="0">
+        <span class="lc-tag">L0 · UNIVERSAL</span>
+        <h3>通用规范层</h3>
+        <p class="lc-sub">无论你用什么技术栈都必须遵守的底线规则，所有项目始终加载。这是整套体系的稳定地基。</p>
+        <div class="lc-stat">
+          <div><b>9</b><span>份规范</span></div>
+          <div><b>强制</b><span>全项目生效</span></div>
+          <div><b>业务无关</b><span>纯技术底线</span></div>
+        </div>
+        <ul class="spec-list" id="l0List"></ul>
+      </div>
+
+      <!-- L1 / L2 不对称分列 -->
+      <div class="layers-bento">
+        <div class="layer-card l1 reveal" data-stagger="140">
+          <span class="lc-tag">L1 · ARCHITECTURE</span>
+          <h3>架构配套方案层</h3>
+          <p class="lc-sub">按项目技术栈自由组合的原子化包：框架基座 + 架构风格 + 持久化 + 前端。</p>
+          <div class="lc-stat">
+            <div><b>11</b><span>个原子包</span></div>
+            <div><b>9</b><span>个预设组合</span></div>
+          </div>
+          <div style="font-size:14px;color:var(--text-dim);line-height:2;">
+            <div><span class="tag tag-l1">基座</span> Spring Boot 通用基础 · <b style="color:var(--c-acc)">24 条</b></div>
+            <div><span class="tag tag-l1">架构</span> MVC 三层 / DDD 四层（互斥二选一）</div>
+            <div><span class="tag tag-l1">持久</span> MyBatis-Plus / MyBatis / JPA / Redis / ES（可多选）</div>
+            <div><span class="tag tag-l1">前端</span> React / Vue</div>
+          </div>
+        </div>
+
+          <div class="layer-card l2 reveal" data-stagger="220">
+            <span class="lc-tag">L2 · DOMAIN PLUGIN</span>
+          <h3>领域扩展插件层</h3>
+          <p class="lc-sub">某个业务领域的专属规则包，按需挂载。</p>
+          <div class="lc-stat">
+            <div><b>1</b><span>个插件</span></div>
+            <div><b>可扩展</b><span>提供模板</span></div>
+          </div>
+          <ul class="spec-list" id="spiList"></ul>
+          <p style="font-size:12.5px;color:var(--text-mute);margin-top:14px;line-height:1.6;">新增领域插件：只需在目录下加两个文件，并在项目自述卡里声明领域标签即可生效。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 术语小贴士 -->
+    <div class="glossary-strip reveal">
+      <h4>读到这里，几个名词先对齐一下</h4>
+      <div class="gl-items">
+        <div class="gl-item"><b>项目指纹</b> = 项目自述卡，记录用什么架构、什么技术栈、属于哪些业务领域。</div>
+        <div class="gl-item"><b>领域插件 (SPI)</b> = 某个业务领域的专属规则包，需要时挂载，不需要时忽略。</div>
+        <div class="gl-item"><b>标准体系管理委员会</b> = 负责规范评审与变更把关的团队，决定规则能否合并生效。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ★ 指纹匹配模拟器 ===================== -->
+<section class="section" id="simulator">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">核心演示 · 指纹匹配模拟器</span>
+      <h2 class="title">亲手选技术栈，<em>实时看</em>引擎会加载哪些规范</h2>
+      <p class="subtitle">这是路由引擎的真实工作方式：勾选你的技术栈，自动应用隐含依赖、检测互斥冲突、计算规范总数，并生成项目自述卡。下方默认填入了一个常见组合。</p>
+    </div>
+
+    <div class="sim-layout">
+      <!-- 左：选择区 -->
+      <div class="sim-panel reveal" data-stagger="0">
+        <h4>选择你的技术栈</h4>
+        <div id="simSelect"></div>
+
+        <h4 style="margin-top:24px;">业务领域（可选）</h4>
+        <div id="simSpi" class="sim-chips"></div>
+
+        <div id="simPresets" class="presets" style="margin-top:24px;"></div>
+
+        <div class="sim-hint" style="margin-top:auto; padding-top:32px;">
+          <div style="font-size:12px; color:var(--text-mute); font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px;">实时反馈</div>
+          <p style="margin:0; font-size:13.5px; color:var(--text-dim); line-height:1.65;">
+            勾选或切换任意项，右侧会重新计算规范清单与项目自述卡。互斥的组合会立即标红，CI 会拒绝合并。
+          </p>
+        </div>
+      </div>
+
+      <!-- 右：输出区 -->
+      <div class="sim-out reveal" data-stagger="100">
+        <div id="simSummary"></div>
+        <div id="simConflicts"></div>
+
+        <div class="sim-panel">
+          <h4>将加载的规范清单（分层）</h4>
+          <div id="simSpecs" class="spec-result"></div>
+        </div>
+
+        <div class="manifest-box">
+          <button class="copy-btn" id="copyManifest">
+            <span class="copy-icon"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+            <span class="copy-check"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+            <span class="copy-label">复制</span>
+          </button>
+          <pre id="simManifest"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 引擎九阶段 ===================== -->
+<section class="section" id="engine" style="background:linear-gradient(180deg, transparent, rgba(255,255,255,.012), transparent);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">路由引擎 · 九阶段</span>
+      <h2 class="title">AI 每次写代码，<em>九步</em>默默完成</h2>
+      <p class="subtitle">引擎不会一次性把所有规范塞进上下文。它先建索引，再按当前任务按需深入加载 · 实测单次任务通常只加载 2~4 份完整规范。</p>
+    </div>
+    <div class="engine-flow" id="engineFlow"></div>
+  </div>
+</section>
+
+<!-- ===================== 架构包全景 ===================== -->
+<section class="section" id="packages">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">规范全景 · 架构配套方案</span>
+      <h2 class="title"><em>11 个</em>原子化包，自由拼装</h2>
+      <p class="subtitle">每个包聚焦一个技术维度，按需组合。下方按维度切换查看，每个包都标注了规则条数与覆盖范围。</p>
+    </div>
+    <div class="pkg-tabs" id="pkgTabs"></div>
+    <div class="pkg-grid" id="pkgBody"></div>
+  </div>
+</section>
+
+<!-- ===================== 迭代管理 ===================== -->
+<section class="section" id="governance" style="background:linear-gradient(180deg, transparent, rgba(255,255,255,.012), transparent);">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">长效机制 · 迭代管理</span>
+      <h2 class="title">规范<em>不能想改就改</em>，但可以安全演进</h2>
+      <p class="subtitle">所有变更必须走「提案 → 评审 → 自动校验 → 合并」流程，由标准体系管理委员会把关。这套机制保证规范在长期迭代中不会退化。</p>
+    </div>
+
+    <!-- 角色权限 -->
+    <h4 style="margin:0 0 16px;color:var(--text-dim);font-size:15px;">▸ 四层角色 · 各司其职</h4>
+    <div class="gov-grid reveal" id="govRoles"></div>
+
+    <div class="gov-cols">
+      <!-- 变更类型 -->
+      <div class="gov-block reveal" data-stagger="0">
+        <h4>三种变更类型 · 对应不同审批门槛</h4>
+        <div class="ctype-list" id="govTypes"></div>
+      </div>
+      <!-- 自动校验 -->
+      <div class="gov-block reveal" data-stagger="120">
+        <h4>14 项自动校验 · CI 把关，校验不过一律阻止合并</h4>
+        <div class="chk-list" id="govChecks"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 快速接入 ===================== -->
+<section class="section" id="quickstart">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">快速接入 · 三步到位</span>
+      <h2 class="title">从零到 AI 自动遵循，<em>三步</em></h2>
+      <p class="subtitle">引入目录、运行引导脚本、开始编程。引导脚本会自动探测你的技术栈、生成项目自述卡，并配置好 AI 编程助手。</p>
+    </div>
+
+    <div class="term-card big reveal" style="max-width:980px;margin:0 auto;">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="ttl">bootstrap · 接入演示</span>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 数据看板 ===================== -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">体系一览</span>
+      <h2 class="title">用数字看<em>这套体系</em></h2>
+      <p class="subtitle">一套覆盖后端、前端、领域扩展的完整工程化规范基础设施。</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</section>
+
+<!-- ===================== 页脚 ===================== -->
+<footer class="footer">
+  <div class="container f-grid">
+    <div class="f-note">
+      <div class="brand" style="margin-bottom:10px;">
+        <div class="logo">S</div>
+        <div>企业编码规范体系</div>
+      </div>
+      一套可自动加载、可自由组合、可协作迭代的 AI 时代编码标准。<br />
+      本页面为体系的自描述全景介绍，所有内容均可在本仓库的 <code>docs/</code> 目录中找到对应实现。
+    </div>
+    <div class="f-meta">
+      <div>体系版本 · 2026 春季版</div>
+      <div>引擎 · 9 阶段路由</div>
+      <div style="margin-top:6px;">© 2026 · 由标准体系管理委员会维护</div>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<!-- ===================== 脚本 ===================== -->
+<!-- GSAP 本地 vendor 依赖（无在线依赖，可离线分享） -->
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="scripts/data.js"></script>
+<script src="scripts/router.js"></script>
+<script src="scripts/terminal.js"></script>
+<script src="scripts/motion.js"></script>
+<script src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+# ============================================================
+# spec-manifest.yaml JSON Schema（YAML 格式）
+# 用于校验项目规范清单文件的合法性
+# 文件位置：.spec/spec-manifest.yaml
+# ============================================================
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "SpecManifest"
+description: "企业编码规范项目清单 Schema，定义项目身份指纹与规范覆盖配置"
+type: object
+required:
+  - version
+  - project
+  - fingerprint
+
+properties:
+
+  # ----------------------------------------------------------
+  # 清单文件版本
+  # ----------------------------------------------------------
+  version:
+    type: string
+    description: "清单文件的 Schema 版本号，当前固定为 1.0"
+    pattern: "^\\d+\\.\\d+$"
+    examples:
+      - "1.0"
+
+  # ----------------------------------------------------------
+  # 项目基本信息
+  # ----------------------------------------------------------
+  project:
+    type: object
+    description: "项目身份信息"
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: "项目名称，建议使用 kebab-case"
+        minLength: 1
+        maxLength: 64
+        pattern: "^[a-z][a-z0-9-]*$"
+        examples:
+          - "order-service"
+          - "data-platform"
+      description:
+        type: string
+        description: "项目一句话描述"
+        maxLength: 200
+        examples:
+          - "订单中台核心服务，负责订单生命周期管理"
+    additionalProperties: false
+
+  # ----------------------------------------------------------
+  # 项目指纹（核心匹配维度）
+  # ----------------------------------------------------------
+  fingerprint:
+    type: object
+    description: "项目技术指纹，Skill 引擎根据此信息决定加载哪些规范"
+    required:
+      - architecture
+      - tech_stack
+      - domains
+    properties:
+
+      architecture:
+        type: string
+        description: "项目采用的主要架构风格"
+        enum:
+          - "spring-boot-mvc"
+          - "ddd"
+          - "hexagonal"
+          - "react-vue-frontend"
+          - "micro-frontend"
+          - "serverless"
+        examples:
+          - "ddd"
+
+      tech_stack:
+        type: array
+        description: "项目使用的技术栈列表，用于加载对应的技术标准规范"
+        items:
+          type: string
+          enum:
+            # 后端框架
+            - "spring-boot"
+            - "spring-cloud"
+            - "mybatis"
+            - "mybatis-plus"
+            - "jpa-hibernate"
+            - "quarkus"
+            # 数据存储
+            - "mysql"
+            - "postgresql"
+            - "mongodb"
+            - "redis"
+            - "elasticsearch"
+            - "clickhouse"
+            # 消息中间件
+            - "kafka"
+            - "rocketmq"
+            - "rabbitmq"
+            # 前端框架
+            - "react"
+            - "vue3"
+            - "nextjs"
+            - "nuxt"
+            - "tailwindcss"
+            # 基础设施
+            - "docker"
+            - "kubernetes"
+            - "istio"
+        uniqueItems: true
+        minItems: 1
+        examples:
+          - ["spring-boot", "mybatis-plus", "mysql", "redis", "kafka"]
+
+      domains:
+        type: array
+        description: "项目涉及的业务领域标签，用于激活对应的 SPI 领域插件"
+        items:
+          type: string
+          pattern: "^[a-z][a-z0-9-]*$"
+          description: "领域标识符，须与 SPI 插件的 activation.requires_domain 值一致"
+        uniqueItems: true
+        examples:
+          - ["data-governance"]
+          - ["payment", "risk-control"]
+
+      http_mode:
+        type: string
+        description: |
+          HTTP 方法使用模式。
+          "full" = 完整 RESTful 模式（GET/POST/PUT/PATCH/DELETE）。
+          "simple" = 简化模式（仅 GET/POST，写入操作通过 URL 路径区分）。
+          默认值为 "full"。
+        enum:
+          - "full"
+          - "simple"
+        default: "full"
+        examples:
+          - "full"
+          - "simple"
+
+    additionalProperties: false
+
+  # ----------------------------------------------------------
+  # 文件保护配置（可选）
+  # ----------------------------------------------------------
+  protection:
+    type: object
+    description: |
+      定义哪些文件默认不可被 AI 修改。
+      Skill 引擎在编码前会将匹配的文件自动归入"禁止触碰区"，
+      除非开发者明确指令修改。详见 universal/change-scope-control.md UNI-CS-003。
+    properties:
+
+      protected_globs:
+        type: array
+        description: "glob 模式匹配的受保护文件列表"
+        items:
+          type: string
+          description: "glob 模式（如 **/*Test.java）"
+        uniqueItems: true
+        examples:
+          - ["**/*Test.java", "**/*.test.ts", "**/*.spec.ts", "**/common/utils/**"]
+
+      protected_files:
+        type: array
+        description: "精确路径的受保护文件或目录列表"
+        items:
+          type: string
+        uniqueItems: true
+        examples:
+          - ["src/main/java/com/example/framework/"]
+
+    additionalProperties: false
+
+  # ----------------------------------------------------------
+  # 规范覆盖配置（可选）
+  # ----------------------------------------------------------
+  overrides:
+    type: object
+    description: "规范加载覆盖配置，用于特殊场景下的规则禁用或强制加载"
+    properties:
+
+      disabled_specs:
+        type: array
+        description: |
+          显式禁用的规范 ID 列表。
+          注意：universal_specs 中的规范不可被禁用，禁用操作将被忽略并记录警告。
+        items:
+          type: string
+          description: "规范 ID，须存在于 routing-rules.yaml 的 spec_registry 中"
+        uniqueItems: true
+        examples:
+          - ["cqrs-pattern", "hexagonal-ports-adapters"]
+
+      forced_specs:
+        type: array
+        description: |
+          强制加载的规范 ID 列表。
+          无视架构/技术栈/领域匹配规则，直接加载指定规范。
+          适用于项目需要某些非默认匹配规范的特殊场景。
+        items:
+          type: string
+          description: "规范 ID，须存在于 routing-rules.yaml 的 spec_registry 中"
+        uniqueItems: true
+        examples:
+          - ["spi-data-governance-rules"]
+
+    additionalProperties: false
+
+# ============================================================
+# 附加约束
+# ============================================================
+additionalProperties: false
+
+# ============================================================
+# 完整示例
+# ============================================================
+# 以下为一个合法的 spec-manifest.yaml 示例：
+#
+# version: "1.0"
+# project:
+#   name: "data-governance-platform"
+#   description: "数据治理平台，提供数据质量、元数据管理、血缘追踪等核心能力"
+# fingerprint:
+#   architecture: "ddd"
+#   tech_stack:
+#     - spring-boot
+#     - mybatis-plus
+#     - mysql
+#     - redis
+#     - kafka
+#     - elasticsearch
+#   domains:
+#     - data-governance
+#   http_mode: "full"
+# protection:
+#   protected_globs:
+#     - "**/*Test.java"
+#     - "**/*.test.ts"
+#     - "**/common/utils/**"
+# overrides:
+#   disabled_specs:
+#     - cqrs-pattern
+#   forced_specs: []

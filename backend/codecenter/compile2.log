@@ -1,0 +1,68 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.meritdata.mdm:codecenter >--------------------
+[INFO] Building codecenter 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ codecenter ---
+[INFO] Deleting D:\dev\Projects\codecenter\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ codecenter ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ codecenter ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 85 source files with javac [debug parameters release 21] to target\classes
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\domain\valueobject\config\SegmentTypeConfig.javaʹ�û򸲸����ѹ�ʱ�� API��
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\application\service\WaterMarkService.javaʹ����δ�����򲻰�ȫ�Ĳ�����
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java:[43,29] ��ע�ӿڲ������ڴ����͵�����
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/dto/CodeGenerateResponse.java:[20,36] �Ҳ�������
+  ����:   ���� builder()
+  λ��: �� com.meritdata.mdm.codecenter.application.dto.CodeGenerateResponse
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/dto/CodeGenerateResponse.java:[28,36] �Ҳ�������
+  ����:   ���� builder()
+  λ��: �� com.meritdata.mdm.codecenter.application.dto.CodeGenerateResponse
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/AuditLogService.java:[31,46] �Ҳ�������
+  ����:   ���� builder()
+  λ��: �� com.meritdata.mdm.codecenter.domain.entity.ModelAuditLog
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/AuditLogService.java:[48,13] �Ҳ�������
+  ����:   ���� log
+  λ��: �� com.meritdata.mdm.codecenter.application.service.AuditLogService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[81,28] �Ҳ�������
+  ����:   ���� getModelId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest�ı��� request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[81,50] �Ҳ�������
+  ����:   ���� getFieldId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest�ı��� request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[83,47] �Ҳ�������
+  ����:   ���� getModelId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest�ı��� request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[83,82] �Ҳ�������
+  ����:   ���� getFieldId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest�ı��� request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[87,58] �Ҳ�������
+  ����:   ���� getId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.domain.entity.CodeRule�ı��� rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[105,13] �Ҳ�������
+  ����:   ���� log
+  λ��: �� com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[106,34] �Ҳ�������
+  ����:   ���� getSequenceNum()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext�ı��� context
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[106,57] �Ҳ�������
+  ����:   ���� getId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.domain.entity.CodeRule�ı��� rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[107,62] �Ҳ�������
+  ����:   ���� getSequenceNum()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext�ı��� context
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[107,91] �Ҳ�������
+  ����:   ���� getId()
+  λ��: ����Ϊcom.meritdata.mdm.codecenter.domain.entity.CodeAllocation�ı��� allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[110,13] �Ҳ�������

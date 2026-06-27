@@ -1,0 +1,24 @@
+version: "1.0"
+profile_id: "spi-mdm-frontend"
+domain: "mdm-frontend"
+description: "主数据产品（MDM）前端领域规范：基于 frontend-vue 通用规范，补充 MDM 项目特有的 Tp-* 封装组件、路径别名、Composables、状态映射、模型卡片等约束"
+activation:
+  requires_domain: "mdm-frontend"
+depends_on:
+  - naming-conventions
+  - api-design
+  - frontend-vue-overview
+  - fe-vue3-encapsulated
+  - fe-vue3-element-plus
+  - fe-vue3-page-patterns
+  - fe-vue3-design-tokens
+status: "active"
+tags:
+  - "mdm"
+  - "TpTable"
+  - "TpPageFrame"
+  - "TpLeftTreeLayout"
+  - "useCrudList"
+  - "ModelCard"
+  - "apps/modules"
+  - "@mdm"

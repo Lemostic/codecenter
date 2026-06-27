@@ -1,0 +1,201 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.meritdata.mdm:codecenter >--------------------
+[INFO] Building codecenter 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ codecenter ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ codecenter ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ codecenter ---
+[INFO] skip non existing resourceDirectory D:\dev\Projects\codecenter\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ codecenter ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 15 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ codecenter ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.meritdata.mdm.codecenter.qa.CodePerfQaTest
+21:51:44.158 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.meritdata.mdm.codecenter.qa.CodePerfQaTest]: CodePerfQaTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:51:44.303 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.meritdata.mdm.codecenter.CodecenterApplication for test class com.meritdata.mdm.codecenter.qa.CodePerfQaTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.5.16)
+
+2026-06-27 21:51:44.876 [main] INFO  [,] c.m.mdm.codecenter.qa.CodePerfQaTest - Starting CodePerfQaTest using Java 21.0.11 with PID 35444 (started by merit in D:\dev\Projects\codecenter)
+2026-06-27 21:51:44.877 [main] DEBUG [,] c.m.mdm.codecenter.qa.CodePerfQaTest - Running with Spring Boot v3.5.16, Spring v6.2.19
+2026-06-27 21:51:44.877 [main] INFO  [,] c.m.mdm.codecenter.qa.CodePerfQaTest - The following 1 profile is active: "dev"
+2026-06-27 21:51:46.401 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-27 21:51:46.404 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-27 21:51:47.067 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 648 ms. Found 9 JPA repository interfaces.
+2026-06-27 21:51:47.119 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-27 21:51:47.122 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-06-27 21:51:47.256 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.CodeAllocationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.257 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.CodeRuleRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.259 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.CodeRuleSegmentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.260 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.CodeSegmentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.260 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.CodeWaterMarkRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.260 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.ModelAttributeRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.262 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.ModelAuditLogRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.263 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.ModelRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.263 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.meritdata.mdm.codecenter.domain.repository.ThemeDomainRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-27 21:51:47.264 [main] INFO  [,] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 107 ms. Found 0 Redis repository interfaces.
+2026-06-27 21:51:48.783 [main] INFO  [,] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-27 21:51:49.088 [main] INFO  [,] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.53.Final
+2026-06-27 21:51:49.184 [main] INFO  [,] o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-06-27 21:51:50.300 [main] INFO  [,] o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-27 21:51:50.419 [main] INFO  [,] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-06-27 21:51:51.152 [main] INFO  [,] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:codecenter user=SA
+2026-06-27 21:51:51.162 [main] INFO  [,] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-06-27 21:51:51.268 [main] WARN  [,] org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-27 21:51:51.338 [main] INFO  [,] o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 2.3.232
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-27 21:51:55.560 [main] INFO  [,] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-27 21:51:55.775 [main] INFO  [,] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-27 21:51:57.819 [main] INFO  [,] o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-27 21:51:59.430 [main] WARN  [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdGenerator ctor: instanceId=1, provider=fallback, factory=fallback, prefetch=fallback, namespace=cosid, step=100
+2026-06-27 21:51:59.596 [main] INFO  [,] c.m.m.c.i.s.SegmentProcessorRegistry - SegmentProcessorRegistry initialized: 6 types = [FIXED, DATE, SEQUENCE, EIGENVALUE, REFERENCE, REFERENCE_SEQ]
+2026-06-27 21:52:05.298 [main] INFO  [,] o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-06-27 21:52:05.458 [main] INFO  [,] c.m.mdm.codecenter.qa.CodePerfQaTest - Started CodePerfQaTest in 20.974 seconds (process running for 21.984)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\merit\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.8\byte-buddy-agent-1.17.8.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-06-27 21:52:06.939 [main] WARN  [,] c.m.m.c.i.dedup.CodeDedupService - DedupClear before=0 after=0 validated=0 dup=0
+2026-06-27 21:52:07.347 [main] INFO  [,] c.m.m.c.a.service.WaterMarkService - Water mark initialized: bizTag=MD:QA:LAT:3c89faada9704e57
+2026-06-27 21:52:07.665 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=1 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.665 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=1 ctxId=450962180 fromContext=false
+2026-06-27 21:52:07.696 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=1 waterBefore=0 actual=1
+2026-06-27 21:52:07.774 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000001, seq=1, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=360ms
+2026-06-27 21:52:07.800 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=2 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.800 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=2 ctxId=595727076 fromContext=false
+2026-06-27 21:52:07.805 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=2 waterBefore=1 actual=2
+2026-06-27 21:52:07.811 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000002, seq=2, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=28ms
+2026-06-27 21:52:07.830 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=3 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.831 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=3 ctxId=1343472275 fromContext=false
+2026-06-27 21:52:07.834 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=3 waterBefore=2 actual=3
+2026-06-27 21:52:07.839 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000003, seq=3, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=24ms
+2026-06-27 21:52:07.860 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=4 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.861 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=4 ctxId=222597220 fromContext=false
+2026-06-27 21:52:07.868 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=4 waterBefore=3 actual=4
+2026-06-27 21:52:07.875 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000004, seq=4, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=32ms
+2026-06-27 21:52:07.913 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=5 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.913 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=5 ctxId=1547647547 fromContext=false
+2026-06-27 21:52:07.920 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=5 waterBefore=4 actual=5
+2026-06-27 21:52:07.932 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000005, seq=5, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=46ms
+2026-06-27 21:52:07.981 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=6 mapSize=1 atomicId=993116346
+2026-06-27 21:52:07.982 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=6 ctxId=1151089812 fromContext=false
+2026-06-27 21:52:07.995 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=6 waterBefore=5 actual=6
+2026-06-27 21:52:08.003 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000006, seq=6, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=62ms
+2026-06-27 21:52:08.032 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=7 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.032 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=7 ctxId=1032127058 fromContext=false
+2026-06-27 21:52:08.039 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=7 waterBefore=6 actual=7
+2026-06-27 21:52:08.043 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000007, seq=7, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=29ms
+2026-06-27 21:52:08.063 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=8 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.063 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=8 ctxId=93516669 fromContext=false
+2026-06-27 21:52:08.066 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=8 waterBefore=7 actual=8
+2026-06-27 21:52:08.071 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000008, seq=8, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=22ms
+2026-06-27 21:52:08.087 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=9 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.087 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=9 ctxId=2120145358 fromContext=false
+2026-06-27 21:52:08.092 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=9 waterBefore=8 actual=9
+2026-06-27 21:52:08.096 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000009, seq=9, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=23ms
+2026-06-27 21:52:08.114 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=10 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.115 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=10 ctxId=1539214360 fromContext=false
+2026-06-27 21:52:08.120 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=10 waterBefore=9 actual=10
+2026-06-27 21:52:08.125 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000010, seq=10, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=26ms
+2026-06-27 21:52:08.154 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=11 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.154 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=11 ctxId=1522900400 fromContext=false
+2026-06-27 21:52:08.166 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=11 waterBefore=10 actual=11
+2026-06-27 21:52:08.176 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000011, seq=11, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=46ms
+2026-06-27 21:52:08.206 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=12 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.207 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=12 ctxId=2003457835 fromContext=false
+2026-06-27 21:52:08.213 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=12 waterBefore=11 actual=12
+2026-06-27 21:52:08.217 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000012, seq=12, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=33ms
+2026-06-27 21:52:08.231 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=13 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.232 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=13 ctxId=434089207 fromContext=false
+2026-06-27 21:52:08.236 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=13 waterBefore=12 actual=13
+2026-06-27 21:52:08.239 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000013, seq=13, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=21ms
+2026-06-27 21:52:08.254 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=14 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.255 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=14 ctxId=1134904383 fromContext=false
+2026-06-27 21:52:08.258 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=14 waterBefore=13 actual=14
+2026-06-27 21:52:08.260 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000014, seq=14, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=18ms
+2026-06-27 21:52:08.276 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=15 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.277 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=15 ctxId=1983890652 fromContext=false
+2026-06-27 21:52:08.282 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=15 waterBefore=14 actual=15
+2026-06-27 21:52:08.286 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000015, seq=15, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=22ms
+2026-06-27 21:52:08.303 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=16 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.303 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=16 ctxId=765607439 fromContext=false
+2026-06-27 21:52:08.307 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=16 waterBefore=15 actual=16
+2026-06-27 21:52:08.310 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000016, seq=16, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=22ms
+2026-06-27 21:52:08.325 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=17 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.325 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=17 ctxId=1825784079 fromContext=false
+2026-06-27 21:52:08.331 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=17 waterBefore=16 actual=17
+2026-06-27 21:52:08.334 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000017, seq=17, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=22ms
+2026-06-27 21:52:08.349 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=18 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.349 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=18 ctxId=1723049116 fromContext=false
+2026-06-27 21:52:08.353 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=18 waterBefore=17 actual=18
+2026-06-27 21:52:08.357 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000018, seq=18, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=21ms
+2026-06-27 21:52:08.377 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=19 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.378 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=19 ctxId=1575263834 fromContext=false
+2026-06-27 21:52:08.385 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=19 waterBefore=18 actual=19
+2026-06-27 21:52:08.391 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000019, seq=19, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=32ms
+2026-06-27 21:52:08.419 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=20 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.419 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=20 ctxId=730718089 fromContext=false
+2026-06-27 21:52:08.434 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=20 waterBefore=19 actual=20
+2026-06-27 21:52:08.440 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000020, seq=20, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=44ms
+2026-06-27 21:52:08.458 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=21 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.459 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=21 ctxId=1566044191 fromContext=false
+2026-06-27 21:52:08.463 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=21 waterBefore=20 actual=21
+2026-06-27 21:52:08.468 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000021, seq=21, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=26ms
+2026-06-27 21:52:08.484 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=22 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.484 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=22 ctxId=2037398406 fromContext=false
+2026-06-27 21:52:08.488 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=22 waterBefore=21 actual=22
+2026-06-27 21:52:08.491 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000022, seq=22, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=21ms
+2026-06-27 21:52:08.504 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=23 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.505 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=23 ctxId=1873578788 fromContext=false
+2026-06-27 21:52:08.509 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=23 waterBefore=22 actual=23
+2026-06-27 21:52:08.515 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000023, seq=23, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=21ms
+2026-06-27 21:52:08.546 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=24 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.547 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=24 ctxId=2082927361 fromContext=false
+2026-06-27 21:52:08.554 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=24 waterBefore=23 actual=24
+2026-06-27 21:52:08.557 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000024, seq=24, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=37ms
+2026-06-27 21:52:08.584 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=25 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.585 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=25 ctxId=996781337 fromContext=false
+2026-06-27 21:52:08.593 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=25 waterBefore=24 actual=25
+2026-06-27 21:52:08.599 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000025, seq=25, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=39ms
+2026-06-27 21:52:08.623 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=26 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.623 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=26 ctxId=155464016 fromContext=false
+2026-06-27 21:52:08.627 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=26 waterBefore=25 actual=26
+2026-06-27 21:52:08.631 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000026, seq=26, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=29ms
+2026-06-27 21:52:08.650 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=27 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.650 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=27 ctxId=71354142 fromContext=false
+2026-06-27 21:52:08.654 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=27 waterBefore=26 actual=27
+2026-06-27 21:52:08.657 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000027, seq=27, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=23ms
+2026-06-27 21:52:08.669 [main] DEBUG [,] c.m.m.c.i.cosid.CosIdGenerator - CosIdSeq bizTag=MD:QA:LAT:3c89faada9704e57 val=28 mapSize=1 atomicId=993116346
+2026-06-27 21:52:08.670 [main] DEBUG [,] c.m.m.c.i.s.SequenceSegmentProcessor - SeqProc bizTag=MD:QA:LAT:3c89faada9704e57 cosidSeq=28 ctxId=64553787 fromContext=false
+2026-06-27 21:52:08.674 [main] DEBUG [,] c.m.m.c.a.service.WaterMarkService - claimNext bizTag=MD:QA:LAT:3c89faada9704e57 requested=28 waterBefore=27 actual=28
+2026-06-27 21:52:08.676 [main] INFO  [,] c.m.m.c.a.s.CodeGenerateService - Code generated: code=QA-00000028, seq=28, rule=ba4f6d44ff88402299bb94735df542b9, elapsed=17ms

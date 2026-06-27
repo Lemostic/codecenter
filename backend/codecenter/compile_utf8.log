@@ -1,0 +1,239 @@
+Picked up JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Dconsole.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.meritdata.mdm:codecenter >--------------------
+[INFO] Building codecenter 0.1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ codecenter ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ codecenter ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 85 source files with javac [debug parameters release 21] to target\classes
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\domain\valueobject\config\SegmentTypeConfig.java使用或覆盖了已过时的 API。
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/domain/valueobject/config/SegmentTypeConfig.java: 有关详细信息, 请使用 -Xlint:deprecation 重新编译。
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: D:\dev\Projects\codecenter\src\main\java\com\meritdata\mdm\codecenter\application\service\WaterMarkService.java使用了未经检查或不安全的操作。
+[INFO] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/WaterMarkService.java:[43,29] 批注接口不适用于此类型的声明
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/dto/CodeGenerateResponse.java:[20,36] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.application.dto.CodeGenerateResponse
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/dto/CodeGenerateResponse.java:[28,36] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.application.dto.CodeGenerateResponse
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/AuditLogService.java:[31,46] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.domain.entity.ModelAuditLog
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/AuditLogService.java:[48,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.AuditLogService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[81,28] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[81,50] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[83,47] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[83,82] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[87,58] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[105,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[106,34] 找不到符号
+  符号:   方法 getSequenceNum()
+  位置: 类型为com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext的变量 context
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[106,57] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[107,62] 找不到符号
+  符号:   方法 getSequenceNum()
+  位置: 类型为com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext的变量 context
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[107,91] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[110,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[111,47] 找不到符号
+  符号:   方法 getErrorCode()
+  位置: 类型为com.meritdata.mdm.codecenter.common.exception.BizException的变量 e
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[113,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[114,28] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[114,50] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[123,28] 找不到符号
+  符号:   方法 getCount()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[123,70] 找不到符号
+  符号:   方法 getCount()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[129,24] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[129,46] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[130,80] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[130,115] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[134,21] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[137,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[140,13] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[147,108] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[156,65] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[157,41] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[158,41] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[159,40] 找不到符号
+  符号:   方法 getDataId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[160,38] 找不到符号
+  符号:   方法 getData()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[161,42] 找不到符号
+  符号:   方法 getTenantId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[170,27] 找不到符号
+  符号:   方法 setCode(java.lang.String)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[171,46] 找不到符号
+  符号:   方法 getSequenceNum()
+  位置: 类型为com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext的变量 ctx
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[172,27] 找不到符号
+  符号:   方法 setSegmentValues(java.lang.String)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[173,27] 找不到符号
+  符号:   方法 setStatus(com.meritdata.mdm.codecenter.domain.enums.AllocationStatus)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[174,27] 找不到符号
+  符号:   方法 setCancelTime(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[175,27] 找不到符号
+  符号:   方法 setRecycleTime(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[176,27] 找不到符号
+  符号:   方法 setRecycleLockTime(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[177,27] 找不到符号
+  符号:   方法 setWasteType(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[178,27] 找不到符号
+  符号:   方法 setDataId(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[179,27] 找不到符号
+  符号:   方法 setConfirmTime(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[180,27] 找不到符号
+  符号:   方法 setUsedTime(<nulltype>)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[181,27] 找不到符号
+  符号:   方法 setAllocateTime(java.time.LocalDateTime)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[182,27] 找不到符号
+  符号:   方法 setIsExposed(int)
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[184,69] 找不到符号
+  符号:   方法 getSequenceNum()
+  位置: 类型为com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext的变量 ctx
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[184,98] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[186,17] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[197,108] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[206,65] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[207,41] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[208,41] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[209,40] 找不到符号
+  符号:   方法 getDataId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[210,38] 找不到符号
+  符号:   方法 getData()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[211,42] 找不到符号
+  符号:   方法 getTenantId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.BatchCodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[224,69] 找不到符号
+  符号:   方法 getSequenceNum()
+  位置: 类型为com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext的变量 ctx
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[224,98] 找不到符号
+  符号:   方法 getId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeAllocation的变量 allocation
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[226,17] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[230,9] 找不到符号
+  符号:   变量 log
+  位置: 类 com.meritdata.mdm.codecenter.application.service.CodeGenerateService
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[237,54] 方法引用无效
+  找不到符号
+    符号:   方法 getSegmentId()
+    位置: 类 com.meritdata.mdm.codecenter.domain.entity.CodeRuleSegment
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[239,43] 方法引用无效
+  找不到符号
+    符号:   方法 getId()
+    位置: 类 com.meritdata.mdm.codecenter.domain.entity.CodeSegment
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[244,41] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[244,67] 找不到符号
+  符号:   方法 getEncodeFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.domain.entity.CodeRule的变量 rule
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[245,30] 找不到符号
+  符号:   方法 builder()
+  位置: 类 com.meritdata.mdm.codecenter.infrastructure.segment.SegmentContext
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[246,33] 找不到符号
+  符号:   方法 getModelId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[247,33] 找不到符号
+  符号:   方法 getFieldId()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[248,30] 找不到符号
+  符号:   方法 getData()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[248,90] 找不到符号
+  符号:   方法 getData()
+  位置: 类型为com.meritdata.mdm.codecenter.application.dto.CodeGenerateRequest的变量 request
+[ERROR] /D:/dev/Projects/codecenter/src/main/java/com/meritdata/mdm/codecenter/application/service/CodeGenerateService.java:[249,34] 找不到符号

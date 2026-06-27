@@ -1,0 +1,346 @@
+# ============================================================
+# 架构包组合推荐预设
+# bootstrap.sh 在自动探测项目技术栈后，根据本文件推荐组合方案
+# 用户可自由调整，本文件仅作为推荐起点
+# ============================================================
+
+version: "1.0"
+
+# ============================================================
+# 一、推荐预设（presets）
+# 每个预设对应一个常见的技术栈组合
+# ============================================================
+presets:
+
+  # --- 后端预设 ---
+
+  - id: "spring-mvc-mybatis-plus"
+    name: "Spring Boot MVC + MyBatis-Plus"
+    description: "标准三层 MVC 架构，MyBatis-Plus 作为持久化，适合 CRUD 应用和管理后台"
+    profiles:
+      - spring-boot-base
+      - arch-mvc
+      - persistence-mybatis-plus
+    tags: ["java", "spring-boot", "mybatis-plus", "crud"]
+
+  - id: "spring-mvc-mybatis"
+    name: "Spring Boot MVC + MyBatis"
+    description: "标准三层 MVC 架构，原生 MyBatis，适合需要精细控制 SQL 的项目"
+    profiles:
+      - spring-boot-base
+      - arch-mvc
+      - persistence-mybatis
+    tags: ["java", "spring-boot", "mybatis", "xml"]
+
+  - id: "spring-mvc-jpa"
+    name: "Spring Boot MVC + JPA"
+    description: "标准三层 MVC 架构，Spring Data JPA，适合领域模型简单的应用"
+    profiles:
+      - spring-boot-base
+      - arch-mvc
+      - persistence-jpa
+    tags: ["java", "spring-boot", "jpa", "hibernate"]
+
+  - id: "ddd-mybatis-plus"
+    name: "DDD 四层架构 + MyBatis-Plus"
+    description: "领域驱动设计四层架构，MyBatis-Plus 持久化，适合复杂业务领域"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+    tags: ["java", "spring-boot", "ddd", "mybatis-plus", "domain-driven"]
+
+  - id: "ddd-mybatis-plus-cqrs"
+    name: "DDD 四层架构 + MyBatis-Plus + 读写分离"
+    description: "DDD 四层架构 + 读写分离（CQRS），适合读写比严重不对称的复杂领域"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+    tags: ["java", "spring-boot", "ddd", "cqrs", "mybatis-plus"]
+    # 注：CQRS 是 arch-ddd 的内置模块，通过 manifest.overrides.disabled_specs 控制
+    # 本预设默认启用 CQRS；如不需要，可在 manifest 中 disabled_specs: ["ddd-cqrs"]
+
+  - id: "ddd-jpa"
+    name: "DDD 四层架构 + JPA / QueryDSL"
+    description: "DDD 四层架构 + JPA，领域模型与持久化解耦最彻底"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-jpa
+    tags: ["java", "spring-boot", "ddd", "jpa", "querydsl"]
+
+  - id: "ddd-mybatis-plus-redis"
+    name: "DDD 四层架构 + MyBatis-Plus + Redis"
+    description: "DDD + MyBatis-Plus + Redis 缓存，适合需要高性能读取的复杂业务"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - persistence-redis
+    tags: ["java", "spring-boot", "ddd", "mybatis-plus", "redis"]
+
+  - id: "ddd-full-stack"
+    name: "DDD 四层架构 + MyBatis-Plus + Redis + ES"
+    description: "DDD + 全技术栈，适合需要搜索、缓存、持久化的复杂业务系统"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - persistence-redis
+      - persistence-elasticsearch
+    tags: ["java", "spring-boot", "ddd", "mybatis-plus", "redis", "elasticsearch"]
+
+  # --- 后端：消息队列（Kafka / RocketMQ 互斥） ---
+
+  - id: "ddd-kafka"
+    name: "DDD + Kafka 消息队列"
+    description: "DDD 四层架构 + Kafka 事件驱动，适合超大规模吞吐、流处理场景"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - messaging-kafka
+    tags: ["java", "spring-boot", "ddd", "kafka", "event-driven", "messaging"]
+
+  - id: "ddd-rocketmq"
+    name: "DDD + RocketMQ 消息队列"
+    description: "DDD 四层架构 + RocketMQ 事务消息/顺序消息/延迟消息，适合 Java 单语言技术栈"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - messaging-rocketmq
+    tags: ["java", "spring-boot", "ddd", "rocketmq", "transaction-message", "ordered-message", "messaging"]
+
+  - id: "ddd-mybatis-plus-flyway"
+    name: "DDD + MyBatis-Plus + Flyway 数据库迁移"
+    description: "DDD 四层架构 + MyBatis-Plus + Flyway schema 演进管理"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - db-migration
+    tags: ["java", "spring-boot", "ddd", "mybatis-plus", "flyway", "schema-migration"]
+
+  # --- 后端：JVM 测试框架 ---
+
+  - id: "ddd-jvm-testing"
+    name: "DDD + JUnit 5 + Mockito + TestContainers"
+    description: "DDD 四层架构 + JVM 测试框架约定（JUnit 5 / AssertJ / Mockito / SpringBootTest / TestContainers）"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - testing-jvm
+    tags: ["java", "spring-boot", "ddd", "junit5", "mockito", "testcontainers", "testing"]
+
+  # --- 前端预设 ---
+
+  - id: "vue3-frontend"
+    name: "Vue 3 前端"
+    description: "Vue 3.5+ + TypeScript + Element Plus 2.13+ + Tailwind CSS + Pinia 前端项目（默认推荐）"
+    profiles:
+      - frontend-vue
+    tags: ["typescript", "vue3", "vue", "frontend", "element-plus", "tailwindcss", "composition-api"]
+    notes:
+      - "包 ID frontend-vue 是单一 ID，与 arch-ddd 单包多文件结构对齐"
+      - "强制封装组件场景用 {EncapsulatedXxx} 占位符，具体前缀（Dm-/Pro-/App-）由项目配置定义"
+      - "包含 common/（通用）+ vue3/（Vue 3 特有）+ selfcheck.md"
+
+  # --- 全栈预设 ---
+
+  - id: "fullstack-mvc"
+    name: "全栈 MVC（后端 + Vue 3 前端）"
+    description: "Spring Boot MVC 后端 + Vue 3 前端，monorepo 结构"
+    profiles:
+      - spring-boot-base
+      - arch-mvc
+      - persistence-mybatis-plus
+      - frontend-vue
+    tags: ["java", "typescript", "fullstack", "spring-boot", "vue3", "vue"]
+
+  - id: "fullstack-ddd-event-driven"
+    name: "全栈 DDD + Kafka + Vue 3 前端"
+    description: "Spring Boot DDD 后端 + Kafka 事件驱动 + Vue 3 前端，monorepo 复杂业务系统"
+    profiles:
+      - spring-boot-base
+      - arch-ddd
+      - persistence-mybatis-plus
+      - persistence-redis
+      - messaging-kafka
+      - db-migration
+      - testing-jvm
+      - frontend-vue
+    tags: ["java", "typescript", "fullstack", "ddd", "kafka", "event-driven", "vue3"]
+
+# ============================================================
+# 二、互斥规则（conflicts）
+# 以下包组合不能同时使用
+# ============================================================
+conflicts:
+  - a: "arch-mvc"
+    b: "arch-ddd"
+    reason: "MVC 三层与 DDD 四层是互斥的架构风格，同一项目只能选一种"
+
+  - a: "persistence-mybatis-plus"
+    b: "persistence-mybatis"
+    reason: "MyBatis-Plus 是 MyBatis 的增强版，不应同时使用"
+
+  - a: "persistence-mybatis-plus"
+    b: "persistence-jpa"
+    reason: "同一项目不应同时使用 MyBatis-Plus 和 JPA（增加复杂度）"
+
+  - a: "persistence-mybatis"
+    b: "persistence-jpa"
+    reason: "同一项目不应同时使用 MyBatis 和 JPA"
+
+  - a: "messaging-kafka"
+    b: "messaging-rocketmq"
+    reason: "Kafka 与 RocketMQ 是互斥的消息中间件选型，同一项目只能选一种（评估依据见 messaging-rocketmq.md §MSG-RMQ-017）"
+
+# ============================================================
+# 三、隐含依赖（implicit dependencies）
+# 当选择了某个包时，自动隐含引入另一个包
+# ============================================================
+implicit_dependencies:
+  - package: "arch-mvc"
+    implies: "spring-boot-base"
+    reason: "MVC 架构基于 Spring Boot"
+
+  - package: "arch-ddd"
+    implies: "spring-boot-base"
+    reason: "DDD 四层架构基于 Spring Boot"
+
+  - package: "persistence-mybatis-plus"
+    implies: "spring-boot-base"
+    reason: "MyBatis-Plus 运行在 Spring Boot 上"
+
+  - package: "persistence-mybatis"
+    implies: "spring-boot-base"
+    reason: "MyBatis 运行在 Spring Boot 上"
+
+  - package: "persistence-jpa"
+    implies: "spring-boot-base"
+    reason: "JPA 运行在 Spring Boot 上"
+
+  - package: "persistence-redis"
+    implies: "spring-boot-base"
+    reason: "Redis 客户端运行在 Spring Boot 上"
+
+  - package: "persistence-elasticsearch"
+    implies: "spring-boot-base"
+    reason: "ES 客户端运行在 Spring Boot 上"
+
+  - package: "messaging-kafka"
+    implies: "spring-boot-base"
+    reason: "Kafka 生产者/消费者运行在 Spring Boot 上"
+
+# ============================================================
+# 四、自动探测规则（detection）
+# bootstrap.sh 扫描项目文件来推断技术栈
+# ============================================================
+detection:
+  rules:
+    - file: "pom.xml"
+      patterns:
+        - pattern: "spring-boot-starter-web"
+          implies: ["spring-boot-base"]
+        - pattern: "mybatis-plus"
+          implies: ["persistence-mybatis-plus"]
+        - pattern: "mybatis-spring-boot"
+          implies: ["persistence-mybatis"]
+        - pattern: "spring-boot-starter-data-jpa"
+          implies: ["persistence-jpa"]
+        - pattern: "querydsl"
+          implies: ["persistence-jpa"]
+        - pattern: "spring-boot-starter-data-redis"
+          implies: ["persistence-redis"]
+        - pattern: "spring-boot-starter-data-elasticsearch"
+          implies: ["persistence-elasticsearch"]
+        - pattern: "elasticsearch-java"
+          implies: ["persistence-elasticsearch"]
+        - pattern: "cola"
+          implies: ["arch-ddd"]
+        - pattern: "kafka"
+          implies: ["messaging-kafka"]
+        - pattern: "rocketmq"
+          implies: ["messaging-rocketmq"]
+        - pattern: "rocketmq-spring-boot"
+          implies: ["messaging-rocketmq"]
+        - pattern: "flyway-core"
+          implies: ["db-migration"]
+        - pattern: "flyway-mysql"
+          implies: ["db-migration"]
+        - pattern: "flyway-database-postgresql"
+          implies: ["db-migration"]
+        - pattern: "liquibase-core"
+          implies: ["db-migration"]
+        - pattern: "spring-boot-starter-test"
+          implies: ["testing-jvm"]
+        - pattern: "junit-jupiter"
+          implies: ["testing-jvm"]
+        - pattern: "mockito-core"
+          implies: ["testing-jvm"]
+        - pattern: "testcontainers"
+          implies: ["testing-jvm"]
+        - pattern: "org.testcontainers"
+          implies: ["testing-jvm"]
+
+    - file: "build.gradle"
+      patterns:
+        - pattern: "spring-boot-starter-web"
+          implies: ["spring-boot-base"]
+        - pattern: "mybatis-plus"
+          implies: ["persistence-mybatis-plus"]
+        - pattern: "mybatis-spring-boot"
+          implies: ["persistence-mybatis"]
+        - pattern: "spring-boot-starter-data-jpa"
+          implies: ["persistence-jpa"]
+        - pattern: "querydsl"
+          implies: ["persistence-jpa"]
+        - pattern: "spring-boot-starter-data-redis"
+          implies: ["persistence-redis"]
+        - pattern: "spring-boot-starter-data-elasticsearch"
+          implies: ["persistence-elasticsearch"]
+        - pattern: "kafka"
+          implies: ["messaging-kafka"]
+        - pattern: "rocketmq"
+          implies: ["messaging-rocketmq"]
+        - pattern: "flyway-core"
+          implies: ["db-migration"]
+        - pattern: "liquibase-core"
+          implies: ["db-migration"]
+
+    - file: "build.gradle.kts"
+      patterns:
+        - pattern: "spring-boot-starter-web"
+          implies: ["spring-boot-base"]
+        - pattern: "mybatis-plus"
+          implies: ["persistence-mybatis-plus"]
+        - pattern: "spring-boot-starter-data-jpa"
+          implies: ["persistence-jpa"]
+        - pattern: "spring-boot-starter-data-redis"
+          implies: ["persistence-redis"]
+        - pattern: "kafka"
+          implies: ["messaging-kafka"]
+
+    - file: "package.json"
+      patterns:
+        - pattern: "\"vue\""
+          implies: ["frontend-vue"]
+        - pattern: "\"nuxt\""
+          implies: ["frontend-vue"]
+
+  # 架构风格推断（需要多个信号组合）
+  architecture_hints:
+    ddd_signals:
+      - "adapter/"
+      - "app/service/"
+      - "domain/model/"
+      - "infrastructure/repository/"
+      - "cola"
+    mvc_signals:
+      - "controller/"
+      - "service/impl/"
+      - "mapper/"

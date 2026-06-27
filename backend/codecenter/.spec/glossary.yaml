@@ -1,0 +1,24 @@
+# ============================================================
+# glossary.yaml — 项目术语字典
+# Skill 引擎在命名变量/类/接口时查阅本文件
+# AI MUST 使用本字典中的标准命名，不得自行发明新术语
+# ============================================================
+
+version: "1.0"
+
+domain_terms: []
+  # - zh: "订单"
+  #   en: "Order"
+  #   java_class: "Order"
+  #   ts_interface: "IOrder"
+  #   api_path_segment: "orders"
+
+abbreviations: []
+  # - abbr: "DTO"
+  #   full: "Data Transfer Object"
+  #   usage: "数据传输对象，用于 API 层"
+
+naming_conventions: []
+  # - context: "订单编号"
+  #   standard: "orderNo"
+  #   avoid: ["orderId", "orderNumber", "ordNo"]

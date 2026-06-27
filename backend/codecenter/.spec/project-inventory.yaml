@@ -1,0 +1,29 @@
+# ============================================================
+# project-inventory.yaml — 项目资产清单
+# Skill 引擎在执行防重复检查时查阅本文件
+# 在编码过程中逐步补充
+# ============================================================
+
+version: "1.0"
+
+modules: []
+  # - id: "order-service"
+  #   path: "src/main/java/com/example/order/"
+  #   core_classes:
+  #     - "OrderService"
+  #     - "OrderRepository"
+
+utilities: []
+  # - class: "StringUtils"
+  #   methods: ["isEmpty()", "toCamelCase()"]
+  #   purpose: "字符串工具方法"
+
+api_endpoints: []
+  # - method: "GET"
+  #   path: "/api/orders/{id}"
+  #   description: "查询订单详情"
+
+shared_components: []
+  # - name: "SearchBar"
+  #   path: "src/components/SearchBar.tsx"
+  #   description: "通用搜索栏组件"
