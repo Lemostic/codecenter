@@ -68,17 +68,39 @@ public class CodeSegmentService {
         if (Boolean.TRUE.equals(seg.getIsArchived())) {
             throw BizException.segmentArchived(seg.getSegmentCode());
         }
-        validate(req);
-        seg.setSegmentCode(req.getSegmentCode());
-        seg.setSegmentName(req.getSegmentName());
-        seg.setSegmentType(req.getSegmentType());
-        seg.setConfigJson(req.getConfigJson());
-        seg.setDescription(req.getDescription());
+        // 更新场景下，允许仅修改部分字段；configJson 为空时保留原值
+        if (req.getConfigJson() == null || req.getConfigJson().isEmpty()) {
+            validatePartial(req);
+        } else {
+            validate(req);
+        }
+        if (req.getSegmentCode() != null) seg.setSegmentCode(req.getSegmentCode());
+        if (req.getSegmentName() != null) seg.setSegmentName(req.getSegmentName());
+        if (req.getSegmentType() != null) seg.setSegmentType(req.getSegmentType());
+        if (req.getConfigJson() != null && !req.getConfigJson().isEmpty()) seg.setConfigJson(req.getConfigJson());
+        if (req.getDescription() != null) seg.setDescription(req.getDescription());
         seg.setUpdatedBy(operatorId);
         seg.setUpdatedAt(LocalDateTime.now());
         CodeSegment saved = codeSegmentRepository.save(seg);
         auditLogService.record(operatorId, null, "SEGMENT_UPDATE", id, "SEGMENT", null, null, null);
         return saved;
+    }
+
+    private void validatePartial(CodeSegmentRequest req) {
+        // 只校验非空字段
+        if (req.getSegmentCode() != null && req.getSegmentCode().isEmpty()) {
+            throw BizException.paramInvalid("segmentCode");
+        }
+        if (req.getSegmentName() != null && req.getSegmentName().isEmpty()) {
+            throw BizException.paramInvalid("segmentName");
+        }
+        if (req.getConfigJson() != null && !req.getConfigJson().isEmpty()) {
+            try {
+                objectMapper.readTree(req.getConfigJson());
+            } catch (Exception e) {
+                throw new BizException("CODECENTER-SEG-2004", "Invalid JSON: " + e.getMessage());
+            }
+        }
     }
 
     /**

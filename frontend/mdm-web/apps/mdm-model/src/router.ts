@@ -16,7 +16,8 @@ const moduleRoutes: RouteRecordRaw[] = Object.values(moduleFiles)
   .flatMap((m) => m.default ?? []);
 
 const router = createAppRouter(moduleRoutes, {
-  baseRoutes: [{ path: '/', redirect: '/model-design' }],
+  // 默认跳转到真实存在的模块（model-index），model-design 由 model-manage 路由别名承担
+  baseRoutes: [{ path: '/', redirect: '/model-index' }],
 });
 
 export default router;

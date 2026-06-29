@@ -122,6 +122,7 @@ export default {
       revise: 'Revise',
       enable: 'Enable',
       disable: 'Disable',
+      activate: 'Activate',
       dataSpec: 'Data Spec',
       versionCompare: 'Compare',
       back: 'Back',

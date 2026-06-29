@@ -126,7 +126,16 @@ const columns = computed<TpTableColumn[]>(() => [
 // ========== 计算属性 ==========
 
 /** 是否模型锁定（只有编辑中状态才能操作） */
-const isModelLocked = computed(() => props.modelStatus !== 'draft');
+/** 是否为草稿（编辑中）—— 草稿状态下锁定不允许编辑规则 */
+const isModelDraft = computed(() => {
+  const s = (props.modelStatus || '').toLowerCase();
+  return s === 'edit' || s === 'draft' || s === '';
+});
+/** 是否完全锁定（草稿 / 停用 / 历史） */
+const isModelLocked = computed(() => {
+  const s = (props.modelStatus || '').toLowerCase();
+  return s === 'edit' || s === 'draft' || s === 'disabled' || s === 'history' || s === '';
+});
 
 /** 获取操作按钮 */
 const getActions = (row: CodingRuleVO) => {

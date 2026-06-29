@@ -40,14 +40,15 @@ public class ThemeDomainController {
         return ApiResponse.ok("Theme deleted", null);
     }
 
-    @GetMapping("/tree")
+@GetMapping("/tree")
     public ApiResponse<List<ThemeDomain>> tree(@RequestParam(required = false) String tenantId) {
-        return ApiResponse.ok(themeDomainService.tree(tenantId == null ? "default" : tenantId));
+        return ApiResponse.ok(themeDomainService.tree(tenantId == null || tenantId.isEmpty() ? null : tenantId));
     }
 
     @GetMapping("/children")
     public ApiResponse<List<ThemeDomain>> children(@RequestParam(required = false) String tenantId,
                                                    @RequestParam(required = false) String parentId) {
-        return ApiResponse.ok(themeDomainService.children(tenantId == null ? "default" : tenantId, parentId));
+        return ApiResponse.ok(themeDomainService.children(
+                tenantId == null || tenantId.isEmpty() ? null : tenantId, parentId));
     }
 }

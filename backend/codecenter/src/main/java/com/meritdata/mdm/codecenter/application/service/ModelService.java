@@ -6,20 +6,24 @@ import com.meritdata.mdm.codecenter.common.exception.BizException;
 import com.meritdata.mdm.codecenter.common.util.IdUtil;
 import com.meritdata.mdm.codecenter.domain.entity.Model;
 import com.meritdata.mdm.codecenter.domain.entity.ModelAttribute;
+import com.meritdata.mdm.codecenter.domain.entity.ThemeDomain;
 import com.meritdata.mdm.codecenter.domain.enums.ModelStatus;
 import com.meritdata.mdm.codecenter.domain.enums.ModelType;
 import com.meritdata.mdm.codecenter.domain.repository.ModelAttributeRepository;
 import com.meritdata.mdm.codecenter.domain.repository.ModelRepository;
+import com.meritdata.mdm.codecenter.domain.repository.ThemeDomainRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,6 +36,7 @@ public class ModelService {
 
     private final ModelRepository modelRepository;
     private final ModelAttributeRepository modelAttributeRepository;
+    private final ThemeDomainRepository themeDomainRepository;
     private final AuditLogService auditLogService;
 
     @Transactional
@@ -97,6 +102,101 @@ public class ModelService {
     public Page<Model> list(String tenantId, int page, int size) {
         Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.min(size, 200));
         return modelRepository.findByTenantId(tenantId, pageable);
+    }
+
+    /**
+     * 多条件分页查询（适配前端 model-index 页面）
+     *
+     * @param tenantId  租户
+     * @param keyword   名称/编码/表名模糊
+     * @param themeId   主题域 ID（null 表示不按主题域过滤）
+     * @param cascade   是否级联（true 时包含选中主题域的所有子主题域模型）
+     * @param status    状态
+     * @param modelType 类型
+     * @param sortBy    排序字段（name/createdAt）
+     * @param sortOrder 排序方向（asc/desc）
+     */
+    public Page<Model> search(String tenantId, String keyword, String themeId, boolean cascade,
+                              String status, String modelType,
+                              String sortBy, String sortOrder,
+                              int page, int size) {
+        Sort sort = resolveSort(sortBy, sortOrder);
+        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.min(size, 200), sort);
+
+        List<String> themeIds = Collections.emptyList();
+        boolean themeIdScope = false;
+        if (themeId != null && !themeId.isEmpty()) {
+            if (cascade) {
+                themeIds = collectDescendantThemeIds(tenantId, themeId);
+                if (themeIds.isEmpty()) {
+                    // 选中主题域无子域：返回空页
+                    return Page.empty(pageable);
+                }
+            } else {
+                themeIds = List.of(themeId);
+            }
+            themeIdScope = true;
+        }
+
+        ModelStatus statusEnum = parseStatus(status);
+        ModelType typeEnum = parseModelType(modelType);
+        return modelRepository.search(tenantId, keyword, statusEnum, typeEnum, themeIdScope, themeIds, pageable);
+    }
+
+    private Sort resolveSort(String sortBy, String sortOrder) {
+        boolean asc = "asc".equalsIgnoreCase(sortOrder);
+        if (sortBy == null || sortBy.isEmpty()) {
+            return Sort.by(Sort.Direction.DESC, "createTime");
+        }
+        switch (sortBy) {
+            case "name":
+                return Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, "modelName");
+            case "createdAt":
+                return Sort.by(asc ? Sort.Direction.ASC : Sort.Direction.DESC, "createTime");
+            default:
+                return Sort.by(Sort.Direction.DESC, "createTime");
+        }
+    }
+
+    private ModelStatus parseStatus(String status) {
+        if (status == null || status.isEmpty()) return null;
+        try {
+            return ModelStatus.valueOf(status.toUpperCase());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private ModelType parseModelType(String type) {
+        if (type == null || type.isEmpty()) return null;
+        try {
+            return ModelType.valueOf(type.toUpperCase());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** 递归收集所有后代主题域 ID（含自身） */
+    private List<String> collectDescendantThemeIds(String tenantId, String rootId) {
+        List<String> result = new ArrayList<>();
+        List<ThemeDomain> all = themeDomainRepository.findByTenantIdOrderBySortOrderAsc(tenantId);
+        if (all.isEmpty()) return result;
+        java.util.Map<String, List<String>> childrenMap = new java.util.HashMap<>();
+        for (ThemeDomain d : all) {
+            if (d.getParentId() == null) continue;
+            childrenMap.computeIfAbsent(d.getParentId(), k -> new ArrayList<>()).add(d.getId());
+        }
+        java.util.Deque<String> stack = new java.util.ArrayDeque<>();
+        stack.push(rootId);
+        while (!stack.isEmpty()) {
+            String cur = stack.pop();
+            result.add(cur);
+            List<String> kids = childrenMap.get(cur);
+            if (kids != null) {
+                for (String k : kids) stack.push(k);
+            }
+        }
+        return result;
     }
 
     public Model getById(String id) {

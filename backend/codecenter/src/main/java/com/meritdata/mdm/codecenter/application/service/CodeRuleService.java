@@ -6,11 +6,13 @@ import com.meritdata.mdm.codecenter.common.exception.BizException;
 import com.meritdata.mdm.codecenter.common.util.IdUtil;
 import com.meritdata.mdm.codecenter.domain.entity.CodeRule;
 import com.meritdata.mdm.codecenter.domain.entity.CodeRuleSegment;
+import com.meritdata.mdm.codecenter.domain.entity.CodeSegment;
 import com.meritdata.mdm.codecenter.domain.enums.RuleStatus;
 import com.meritdata.mdm.codecenter.domain.enums.RuleMode;
 import com.meritdata.mdm.codecenter.domain.enums.GenerateTrigger;
 import com.meritdata.mdm.codecenter.domain.repository.CodeRuleRepository;
 import com.meritdata.mdm.codecenter.domain.repository.CodeRuleSegmentRepository;
+import com.meritdata.mdm.codecenter.domain.repository.CodeSegmentRepository;
 import com.meritdata.mdm.codecenter.domain.valueobject.FormatTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 编码规则管理服务 - CRUD + 生命周期
@@ -37,6 +41,7 @@ public class CodeRuleService {
 
     private final CodeRuleRepository codeRuleRepository;
     private final CodeRuleSegmentRepository codeRuleSegmentRepository;
+    private final CodeSegmentRepository codeSegmentRepository;
     private final AuditLogService auditLogService;
     private final RuleCacheService ruleCacheService;
 
@@ -111,7 +116,7 @@ public class CodeRuleService {
         ruleCacheService.invalidate(rule.getModelId(), rule.getEncodeFieldId());
     }
 
-    @Transactional
+@Transactional
     public CodeRule publish(String id, String operatorId) {
         CodeRule rule = codeRuleRepository.findById(id).orElseThrow(() -> BizException.ruleNotFound(id));
         if (rule.getStatus() != RuleStatus.EDIT) {
@@ -137,6 +142,8 @@ public class CodeRuleService {
         log.info("Code rule published: id={}, version={}", id, saved.getVersion());
         // 缓存失效: 新 EFFECT 版本必须立即生效
         ruleCacheService.invalidate(saved.getModelId(), saved.getEncodeFieldId());
+        // 触发 lazy 初始化，避免 Controller 序列化时 Session 已关闭
+        saved.getRuleSegments().size();
         return saved;
     }
 
@@ -206,23 +213,115 @@ public class CodeRuleService {
         return saved;
     }
 
+@Transactional(readOnly = true)
     public Page<CodeRule> listByModel(String modelId, int page, int size) {
         Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.min(size, 200));
-        return codeRuleRepository.findByModelId(modelId, pageable);
+        Page<CodeRule> p = codeRuleRepository.findByModelId(modelId, pageable);
+        // 触发 lazy 初始化，避免 Controller 序列化时 Session 已关闭
+        p.getContent().forEach(r -> r.getRuleSegments().size());
+        return p;
     }
 
+    @Transactional(readOnly = true)
     public List<CodeRule> listVersions(String modelId, String fieldId) {
-        return codeRuleRepository.findByModelIdAndEncodeFieldIdOrderByVersionDesc(modelId, fieldId);
+        List<CodeRule> list = codeRuleRepository.findByModelIdAndEncodeFieldIdOrderByVersionDesc(modelId, fieldId);
+        list.forEach(r -> r.getRuleSegments().size());
+        return list;
     }
 
+    @Transactional(readOnly = true)
     public CodeRule getById(String id) {
-        return codeRuleRepository.findById(id).orElseThrow(() -> BizException.ruleNotFound(id));
+        CodeRule rule = codeRuleRepository.findById(id).orElseThrow(() -> BizException.ruleNotFound(id));
+        rule.getRuleSegments().size();
+        return rule;
     }
 
+    @Transactional(readOnly = true)
     public CodeRule getEffective(String modelId, String fieldId) {
-        return codeRuleRepository.findFirstByModelIdAndEncodeFieldIdAndStatusOrderByVersionDesc(
+        CodeRule rule = codeRuleRepository.findFirstByModelIdAndEncodeFieldIdAndStatusOrderByVersionDesc(
                 modelId, fieldId, RuleStatus.EFFECT)
                 .orElseThrow(() -> BizException.ruleNotFound("model=" + modelId + ",field=" + fieldId));
+        rule.getRuleSegments().size();
+        return rule;
+    }
+
+    /**
+     * 保存规则的码段配置 —— 替换式（先清空再插入）
+     * @param ruleId 规则 ID
+     * @param segments 前端传入的码段配置列表（含 segmentCode / segmentType / configJson / sortOrder）
+     * @return 已保存的关联记录
+     */
+    @Transactional
+    public List<CodeRuleSegment> saveRuleSegments(String ruleId, List<Map<String, Object>> segments) {
+        CodeRule rule = codeRuleRepository.findById(ruleId)
+                .orElseThrow(() -> BizException.ruleNotFound(ruleId));
+        // 先清空
+        codeRuleSegmentRepository.deleteByRuleId(ruleId);
+        codeRuleSegmentRepository.flush();
+
+        List<CodeRuleSegment> saved = new ArrayList<>();
+        if (segments == null) {
+            ruleCacheService.invalidate(rule.getModelId(), rule.getEncodeFieldId());
+            auditLogService.record("system", null, "RULE_SEGMENTS_SAVE", ruleId, "RULE", null, null, null);
+            return saved;
+        }
+
+        for (Map<String, Object> s : segments) {
+            String segmentCode = (String) s.get("segmentCode");
+            if (segmentCode == null || segmentCode.isEmpty()) continue;
+            // 优先按 id 查，否则按 code 查
+            CodeSegment seg = null;
+            Object idObj = s.get("id");
+            if (idObj != null) {
+                seg = codeSegmentRepository.findById(idObj.toString()).orElse(null);
+            }
+            if (seg == null) {
+                seg = codeSegmentRepository.findFirstBySegmentCodeAndIsArchivedFalse(segmentCode).orElse(null);
+            }
+            if (seg == null) {
+                throw BizException.paramInvalid("segmentCode: " + segmentCode + " not found");
+            }
+            Integer sortOrder = s.get("sortOrder") == null ? saved.size() + 1 :
+                    ((Number) s.get("sortOrder")).intValue();
+            String resetCondition = (String) s.get("resetCondition");
+            CodeRuleSegment link = CodeRuleSegment.builder()
+                    .id(IdUtil.simpleId())
+                    .ruleId(ruleId)
+                    .segmentId(seg.getId())
+                    .sortOrder(sortOrder)
+                    .resetCondition(resetCondition)
+                    .tenantId(rule.getTenantId())
+                    .build();
+            saved.add(codeRuleSegmentRepository.save(link));
+        }
+        ruleCacheService.invalidate(rule.getModelId(), rule.getEncodeFieldId());
+        auditLogService.record("system", null, "RULE_SEGMENTS_SAVE", ruleId, "RULE",
+                String.valueOf(saved.size()), null, null);
+        log.info("Rule segments saved: ruleId={}, count={}", ruleId, saved.size());
+        return saved;
+    }
+
+    /**
+     * 获取规则的码段快照（包含 CodeSegment 详情）
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> listRuleSegments(String ruleId) {
+        List<CodeRuleSegment> links = codeRuleSegmentRepository.findByRuleIdOrderBySortOrderAsc(ruleId);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (CodeRuleSegment link : links) {
+            CodeSegment seg = codeSegmentRepository.findById(link.getSegmentId()).orElse(null);
+            Map<String, Object> item = new java.util.LinkedHashMap<>();
+            item.put("linkId", link.getId());
+            item.put("segmentId", link.getSegmentId());
+            item.put("segmentCode", seg != null ? seg.getSegmentCode() : "");
+            item.put("segmentName", seg != null ? seg.getSegmentName() : "");
+            item.put("segmentType", seg != null ? seg.getSegmentType().name() : "");
+            item.put("configJson", seg != null ? seg.getConfigJson() : "{}");
+            item.put("sortOrder", link.getSortOrder());
+            item.put("resetCondition", link.getResetCondition());
+            result.add(item);
+        }
+        return result;
     }
 
     private void validate(CodeRuleRequest req) {

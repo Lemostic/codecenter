@@ -18,4 +18,6 @@ public interface CodeSegmentRepository extends JpaRepository<CodeSegment, String
     Page<CodeSegment> findByTenantIdAndSegmentTypeAndIsArchivedFalse(String tenantId, SegmentType type, Pageable pageable);
     List<CodeSegment> findByIdIn(List<String> ids);
     long countByIsArchivedFalse();
+
+    Optional<CodeSegment> findFirstBySegmentCodeAndIsArchivedFalse(String segmentCode);
 }

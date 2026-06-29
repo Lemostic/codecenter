@@ -1,5 +1,7 @@
 package com.meritdata.mdm.codecenter.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * 主数据模型类型
  *
@@ -10,5 +12,17 @@ package com.meritdata.mdm.codecenter.domain.enums;
 public enum ModelType {
     NORMAL,
     COMPOSITE,
-    CLASSIFY
+    CLASSIFY;
+
+    /**
+     * 兼容前端大小写：normal/composite/classification/classify
+     */
+    @JsonCreator
+    public static ModelType fromString(String value) {
+        if (value == null) return null;
+        String v = value.trim().toUpperCase();
+        // classification → CLASSIFY
+        if ("CLASSIFICATION".equals(v)) return CLASSIFY;
+        return ModelType.valueOf(v);
+    }
 }

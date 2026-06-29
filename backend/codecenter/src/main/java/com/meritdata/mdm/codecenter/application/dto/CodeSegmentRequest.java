@@ -18,4 +18,5 @@ public class CodeSegmentRequest {
     private String configJson;
     private String description;
     private String tenantId;
+    private String modelId;
 }

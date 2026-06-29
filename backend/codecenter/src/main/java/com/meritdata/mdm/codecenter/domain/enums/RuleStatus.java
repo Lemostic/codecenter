@@ -1,5 +1,7 @@
 package com.meritdata.mdm.codecenter.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  * 编码规则状态
  *
@@ -20,5 +22,11 @@ public enum RuleStatus {
 
     public boolean isActive() {
         return this == EFFECT;
+    }
+
+    @JsonCreator
+    public static RuleStatus fromString(String value) {
+        if (value == null) return null;
+        return RuleStatus.valueOf(value.trim().toUpperCase());
     }
 }

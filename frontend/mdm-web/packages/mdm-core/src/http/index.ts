@@ -3,6 +3,10 @@
  *
  * 基于 Axios 封装，提供请求/响应拦截器。
  * 业务模块统一 import { http } from '@mdm/core/http' 使用。
+ *
+ * 注意：baseURL 强制为空（相对路径），所有 /api 请求由 Vite 代理转发到
+ * 后端真实地址（配置在 vite.config.ts 的 server.proxy['/api'].target）。
+ * 这样可以避免浏览器 CORS 问题。
  */
 /// <reference types="vite/client" />
 import axios from 'axios';
@@ -12,7 +16,8 @@ import { getToken, logout } from '../auth';
 
 /** 创建 Axios 实例 */
 const instance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '',
+  // 强制相对路径：通过 Vite 代理转发，避免跨域
+  baseURL: '',
   timeout: 30_000,
   headers: { 'Content-Type': 'application/json' },
 });

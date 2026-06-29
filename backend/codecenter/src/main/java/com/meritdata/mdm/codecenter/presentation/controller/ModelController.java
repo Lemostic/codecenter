@@ -55,11 +55,26 @@ public class ModelController {
     }
 
     @GetMapping("/list")
-    public ApiResponse<PageResponse<Model>> list(@RequestParam(required = false) String tenantId,
+    public ApiResponse<Map<String, Object>> list(@RequestParam(required = false) String tenantId,
+                                                 @RequestParam(required = false) String keyword,
+                                                 @RequestParam(required = false) String themeId,
+                                                 @RequestParam(required = false, defaultValue = "false") boolean cascade,
+                                                 @RequestParam(required = false) String status,
+                                                 @RequestParam(required = false) String modelType,
+                                                 @RequestParam(required = false) String sortBy,
+                                                 @RequestParam(required = false, defaultValue = "desc") String sortOrder,
                                                  @RequestParam(defaultValue = "1") int page,
                                                  @RequestParam(defaultValue = "20") int size) {
-        Page<Model> p = modelService.list(tenantId, page, size);
-        return ApiResponse.ok(PageResponse.of(p.getContent(), p.getTotalElements(), page, size));
+        Page<Model> p = modelService.search(tenantId, keyword, themeId, cascade,
+                status, modelType, sortBy, sortOrder, page, size);
+        // 同时返回 rows 和 records 双别名，兼容前端两种访问方式
+        Map<String, Object> data = new java.util.LinkedHashMap<>();
+        data.put("records", p.getContent());
+        data.put("rows", p.getContent());
+        data.put("total", p.getTotalElements());
+        data.put("page", page);
+        data.put("size", size);
+        return ApiResponse.ok(data);
     }
 
     @GetMapping("/{id}/attributes")

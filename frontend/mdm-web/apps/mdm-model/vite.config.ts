@@ -40,7 +40,9 @@ export default defineConfig(({ mode }) => {
         : {
             proxy: {
               '/api': {
-                target: env.VITE_API_BASE_URL || 'http://localhost:8080',
+                // 真实后端固定在 8088（VITE_API_BASE_URL 不再作为 axios baseURL，
+                // 只用于让 axios 走相对路径，proxy 这里固定指向后端端口）
+                target: 'http://localhost:8088',
                 changeOrigin: true,
               },
             },

@@ -23,6 +23,7 @@ export default {
       card: '卡片布局',
       list: '列表布局',
       cascade: '显示级联数据',
+      showCascade: '显示级联数据',
     },
     search: {
       keywordPlaceholder: '模型名称/模型编码',
@@ -121,6 +122,7 @@ export default {
       revise: '修订',
       enable: '启用',
       disable: '停用',
+      activate: '生效',
       dataSpec: '数据规范',
       versionCompare: '版本对比',
       back: '返回',

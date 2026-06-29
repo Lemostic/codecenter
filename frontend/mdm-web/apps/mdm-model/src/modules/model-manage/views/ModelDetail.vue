@@ -18,7 +18,8 @@ import type { AxiosResponse } from 'axios';
 import { ArrowLeft, ArrowUp, Close, Document } from '@element-plus/icons-vue';
 import TpPageFrame from '@mdm/common/components/layout/TpPageFrame.vue';
 import TpEmpty from '@mdm/common/components/data/TpEmpty.vue';
-import { getModel, disableModel, enableModel } from '@/modules/model-design/api/model';
+import { getModel, activateModel, disableModel, enableModel } from '@/modules/model-design/api/model';
+import { TpMessage } from '@mdm/common/components/feedback/TpMessage';
 import type { ModelVO, ModelStatus, StandardFile } from '@/modules/model-design/types/model';
 import { MODEL_STATUS_DOT_COLOR } from '@/modules/model-design/types/model';
 import type { ApiResponse } from '@mdm/common/types/api';
@@ -122,8 +123,33 @@ const statusBadgeBg = computed(() => {
   return `${color}1a`;
 });
 
+/** 当前状态（后端 raw 值：EDIT/EFFECT/DISABLED/HISTORY/AUDITING；前端约定 draft/active/disabled） */
+const normalizeStatus = (s: string | undefined): string => {
+  if (!s) return '';
+  const up = s.toUpperCase();
+  if (up === 'EDIT') return 'draft';
+  if (up === 'EFFECT') return 'active';
+  if (up === 'DISABLED') return 'disabled';
+  if (up === 'HISTORY') return 'history';
+  if (up === 'AUDITING') return 'auditing';
+  return s.toLowerCase();
+};
+const currentStatus = computed(() => normalizeStatus(model.value?.status));
+
 /** 是否为停用状态 */
-const isDisabled = computed(() => model.value?.status === 'disabled');
+const isDisabled = computed(() => currentStatus.value === 'disabled');
+/** 是否为生效状态 */
+const isEffect = computed(() => currentStatus.value === 'active');
+/** 是否为编辑中 */
+const isDraft = computed(() => currentStatus.value === 'draft');
+
+/** 主操作按钮配置 —— 按状态切换 */
+const primaryAction = computed(() => {
+  if (isDraft.value) return { type: 'success', label: t('modelDesign.detail.btn.activate'), key: 'activate' };
+  if (isEffect.value) return { type: 'warning', label: t('modelDesign.detail.btn.disable'), key: 'disable' };
+  if (isDisabled.value) return { type: 'success', label: t('modelDesign.detail.btn.enable'), key: 'enable' };
+  return { type: 'warning', label: t('modelDesign.detail.btn.disable'), key: 'disable' };
+});
 
 // ========== 7. 方法 ==========
 
@@ -141,22 +167,29 @@ const handleRevise = () => {
   router.push({ name: 'model-design-editor', params: { id: model.value.id } });
 };
 
-/** 停用/启用切换（§7.3 try/catch/finally + TpMessage + console.error + :loading） */
+/** 主操作按钮：生效 / 停用 / 启用（按状态切换） */
 const handleToggleStatus = async () => {
   if (!model.value || togglingStatus.value) return;
+  const action = primaryAction.value.key;
   togglingStatus.value = true;
   try {
-    if (isDisabled.value) {
-      await enableModel(model.value.id);
-      model.value.status = 'active';
+    if (action === 'activate') {
+      await activateModel(model.value.id);
+      model.value.status = 'effect';
       model.value.statusLabel = '生效';
-    } else {
+      TpMessage.success(t('modelDesign.detail.btn.activate') + ' 成功');
+    } else if (action === 'disable') {
       await disableModel(model.value.id);
       model.value.status = 'disabled';
       model.value.statusLabel = '停用';
+      TpMessage.success(t('modelDesign.detail.btn.disable') + ' 成功');
+    } else if (action === 'enable') {
+      await enableModel(model.value.id);
+      model.value.status = 'effect';
+      model.value.statusLabel = '生效';
+      TpMessage.success(t('modelDesign.detail.btn.enable') + ' 成功');
     }
   } catch (error) {
-    // 错误由 core/http 拦截器统一处理提示
     console.error('[handleToggleStatus]', error);
   } finally {
     togglingStatus.value = false;
@@ -317,14 +350,15 @@ onMounted(() => {
 
             <!-- 操作按钮栏 -->
             <div class="flex items-center gap-2 py-3 px-6">
-              <el-button size="default" type="primary" @click="handleRevise">{{ t('modelDesign.detail.btn.revise') }}</el-button>
               <el-button
                 size="default"
+                :type="primaryAction.type as any"
                 :loading="togglingStatus"
                 @click="handleToggleStatus"
               >
-                {{ isDisabled ? t('modelDesign.detail.btn.enable') : t('modelDesign.detail.btn.disable') }}
+                {{ primaryAction.label }}
               </el-button>
+              <el-button size="default" :disabled="isDraft" @click="handleRevise">{{ t('modelDesign.detail.btn.revise') }}</el-button>
               <el-button size="default" @click="handleDataSpec">{{ t('modelDesign.detail.btn.dataSpec') }}</el-button>
               <el-button size="default" @click="handleVersionCompare">{{ t('modelDesign.detail.btn.versionCompare') }}</el-button>
             </div>
