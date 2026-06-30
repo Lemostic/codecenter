@@ -33,6 +33,23 @@ const handleAuth = (e: Event) => {
   e.stopPropagation();
   emit('auth', props.model);
 };
+
+/** 密级 → 中文 */
+const securityLevelLabel = computed<string>(() => {
+  const raw = (props.model.securityLevel || props.model.secretLevel || '').toString().trim();
+  if (!raw) return '';
+  const map: Record<string, string> = {
+    INTERNAL: '内部', PUBLIC: '公开', OPEN: '公开', SECRET: '秘密', CONFIDENTIAL: '机密', TOP_SECRET: '绝密',
+  };
+  return map[raw.toUpperCase()] ?? raw;
+});
+
+/** 状态徽章配色: 生效=绿, 其余=红 */
+const statusBadgeStyle = computed(() => {
+  const isActive = props.model.status === 'EFFECT' || props.model.statusLabel === '生效';
+  if (isActive) return { bg: 'rgba(82, 196, 26, 0.12)', border: 'rgba(82, 196, 26, 0.5)', color: '#389e0d' };
+  return { bg: 'rgba(227, 77, 89, 0.1)', border: 'rgba(227, 77, 89, 0.5)', color: '#e34d59' };
+});
 </script>
 
 <template>
@@ -85,11 +102,11 @@ const handleAuth = (e: Event) => {
       <div class="flex items-center">
         <!-- 机密标签（可选，有值时显示） -->
         <div
-          v-if="model.securityLevel || model.secretLevel"
+          v-if="securityLevelLabel"
           class="flex items-center justify-center"
           style="padding: 6px 8px; border-radius: 3px; background: rgba(227, 77, 89, 0.1); border: 1px solid rgba(227, 77, 89, 0.5);"
         >
-          <span style="font-size: 12px; line-height: 16px; color: #e34d59;">{{ model.securityLevel || model.secretLevel }}</span>
+          <span style="font-size: 12px; line-height: 16px; color: #e34d59;">{{ securityLevelLabel }}</span>
         </div>
         <!-- 版本 + 状态组合标签 -->
         <div class="flex items-center">
@@ -101,9 +118,10 @@ const handleAuth = (e: Event) => {
           </div>
           <div
             class="flex items-center justify-center"
-            style="padding: 6px 8px; border-radius: 0 3px 3px 0; background: rgba(227, 77, 89, 0.1);"
+            style="padding: 6px 8px; border-radius: 0 3px 3px 0;"
+            :style="{ background: statusBadgeStyle.bg, border: '1px solid ' + statusBadgeStyle.border }"
           >
-            <span style="font-size: 12px; line-height: 16px; color: #e34d59;">{{ model.statusLabel }}</span>
+            <span :style="{ fontSize: '12px', lineHeight: '16px', color: statusBadgeStyle.color }">{{ model.statusLabel }}</span>
           </div>
         </div>
       </div>
