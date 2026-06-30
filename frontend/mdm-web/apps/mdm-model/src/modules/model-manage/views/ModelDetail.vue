@@ -206,6 +206,15 @@ const handleVersionCompare = () => {
   // TODO: 下一阶段实现
 };
 
+/** 批量赋码 → 跳转到 test-bench.html（带 modelId 参数） */
+const handleBatchCode = () => {
+  const modelId = (model.value as any)?.id || '';
+  const url = modelId
+    ? `/test-bench.html?modelId=${encodeURIComponent(modelId)}`
+    : '/test-bench.html';
+  window.open(url, '_blank');
+};
+
 /** 移除关联标准文件标签 */
 const handleRemoveTag = (tagId: string | number) => {
   if (!model.value?.standardFiles) return;
@@ -361,6 +370,7 @@ onMounted(() => {
               <el-button size="default" :disabled="isDraft" @click="handleRevise">{{ t('modelDesign.detail.btn.revise') }}</el-button>
               <el-button size="default" @click="handleDataSpec">{{ t('modelDesign.detail.btn.dataSpec') }}</el-button>
               <el-button size="default" @click="handleVersionCompare">{{ t('modelDesign.detail.btn.versionCompare') }}</el-button>
+              <el-button size="default" type="primary" @click="handleBatchCode">批量赋码</el-button>
             </div>
 
             <!-- 版本选择器 + 状态标识 -->
