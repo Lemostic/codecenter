@@ -39,7 +39,7 @@ const loadData = async () => {
     treeData.value = [
       {
         id: 'main',
-        name: '供应商_20583_文雪颖',
+        name: '供应商_20583',
         isLeaf: false,
         children: [
           { id: 'sub1', name: '机构信息', isLeaf: true },
