@@ -357,6 +357,7 @@ const handleView = async (row: CodingRuleVO) => {
   editingRuleId.value = row.id;
   resetForm();
   // 加载下拉选项供 select 选中匹配
+  await loadAvailableAttributes();
   await loadAvailableSegments();
   try {
     // 后端详情接口返回 encodeFieldId/ruleName/ruleMode/triggerType;
@@ -702,6 +703,23 @@ watch(() => [props.modelId, props.modelVersion], () => {
       >
         <el-form-item label="规则类型">
           <el-tag>{{ formData.ruleDefinitionType === 'segment' ? '码段组合' : '脚本自定义' }}</el-tag>
+        </el-form-item>
+
+        <el-form-item label="编码字段" prop="attributeId">
+          <el-select
+            v-model="formData.attributeId"
+            filterable
+            placeholder="请选择需要生成编码的字段"
+            class="w-full"
+            :disabled="dialogMode === 'view'"
+          >
+            <el-option
+              v-for="opt in availableAttributes"
+              :key="opt.id"
+              :value="opt.id"
+              :label="opt.name"
+            />
+          </el-select>
         </el-form-item>
 
         <el-form-item label="规则名称" prop="name">
