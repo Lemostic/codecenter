@@ -77,10 +77,11 @@ const isEmpty = computed<boolean>(() => {
   return !props.loading && props.data.length === 0;
 });
 
-/** grid 容器 style：列宽（auto-fill + minmax），每行按内容高度（不拉伸） */
+/** grid 容器 style：列宽 + 行紧贴顶部 (不随容器高度拉伸) */
 const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(auto-fill, minmax(${props.gridMinWidth}px, 1fr))`,
   alignItems: 'start',
+  alignContent: 'start',
 }));
 
 /**
