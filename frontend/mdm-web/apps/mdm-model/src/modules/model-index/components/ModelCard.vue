@@ -58,11 +58,11 @@ const handleAuth = (e: Event) => {
       </div>
       <!-- 名称 + 编码（纵向排列） -->
       <div class="flex-1 min-w-0">
-        <div class="truncate" style="font-size: 14px; font-weight: 500; color: #3d4247; line-height: 24px;" :title="model.name">
-          {{ model.name }}
+        <div class="truncate" style="font-size: 14px; font-weight: 500; color: #3d4247; line-height: 24px;" :title="model.modelName || model.name">
+          {{ model.modelName || model.name }}
         </div>
-        <div class="truncate" style="font-size: 12px; font-weight: 400; color: #666666; line-height: 20px;" :title="model.tableName">
-          {{ model.tableName }}
+        <div class="truncate" style="font-size: 12px; font-weight: 400; color: #666666; line-height: 20px;" :title="model.modelCode || model.code">
+          {{ model.modelCode || model.code }}
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ const handleAuth = (e: Event) => {
         模型类型：{{ model.modelTypeLabel }}
       </div>
       <div class="flex items-center" style="font-size: 13px; color: #666666; line-height: 30px;">
-        创建时间：{{ model.createTime }}
+        创建时间：{{ model.createTime || model.createdAt }}
       </div>
     </div>
 
@@ -85,11 +85,11 @@ const handleAuth = (e: Event) => {
       <div class="flex items-center">
         <!-- 机密标签（可选，有值时显示） -->
         <div
-          v-if="model.secretLevel"
+          v-if="model.securityLevel || model.secretLevel"
           class="flex items-center justify-center"
           style="padding: 6px 8px; border-radius: 3px; background: rgba(227, 77, 89, 0.1); border: 1px solid rgba(227, 77, 89, 0.5);"
         >
-          <span style="font-size: 12px; line-height: 16px; color: #e34d59;">{{ model.secretLevel }}</span>
+          <span style="font-size: 12px; line-height: 16px; color: #e34d59;">{{ model.securityLevel || model.secretLevel }}</span>
         </div>
         <!-- 版本 + 状态组合标签 -->
         <div class="flex items-center">

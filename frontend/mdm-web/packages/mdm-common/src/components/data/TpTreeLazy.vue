@@ -92,7 +92,15 @@ const handleSearchInput = () => {
 // ========== 默认节点渲染 ==========
 const getLabel = (data: TpTreeNode): string => {
   const labelKey = props.fieldMap.label ?? 'name';
-  return String(data[labelKey] ?? '');
+  const v = data?.[labelKey];
+  if (v != null && v !== '') return String(v);
+  // ponytail: 兼容 API 返回不同字段名的兜底 (name/domainName/title)
+  const fallbacks = ['name', 'domainName', 'title', 'label', 'text'];
+  for (const k of fallbacks) {
+    const fv = data?.[k];
+    if (fv != null && fv !== '') return String(fv);
+  }
+  return '';
 };
 
 // ========== 事件转发 ==========
