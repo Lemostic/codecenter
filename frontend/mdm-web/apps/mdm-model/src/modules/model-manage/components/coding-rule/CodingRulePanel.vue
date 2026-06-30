@@ -101,14 +101,14 @@ const loadAvailableSegments = async () => {
 /** 加载规则的码段（编辑时回显） */
 const loadRuleSegmentsForEdit = async (ruleId: ID) => {
   const res = await getCodingRuleSegments(ruleId) as any;
-  if (res.data?.success && Array.isArray(res.data.data)) {
-    selectedSegments.value = res.data.data
-      .map((s: any, idx: number) => ({
-        segmentId: s.id || s.segmentId,
-        segmentCode: s.segmentCode,
-        segmentType: s.segmentType,
-        sortOrder: s.sortOrder ?? idx + 1
-      }));
+  const segList = res.data?.data ?? res.data ?? [];
+  if (Array.isArray(segList)) {
+    selectedSegments.value = segList.map((s: any, idx: number) => ({
+      segmentId: s.segmentId || s.id || '',
+      segmentCode: s.segmentCode || s.code || '',
+      segmentType: s.segmentType || '',
+      sortOrder: s.sortOrder ?? idx + 1,
+    }));
   }
 };
 
@@ -272,10 +272,11 @@ const loadRules = async () => {
       // 异步加载每个规则的码段组合
       await Promise.all(rows.map(async (row: any) => {
         try {
-          const segRes = await getCodingRuleSegments(row.id) as unknown as { data: { success: boolean; data: any[] } };
-          if (segRes.data?.success && Array.isArray(segRes.data.data)) {
-            row.ruleSegments = segRes.data.data;
-            row.segmentCodes = segRes.data.data.map((s: any) => s.segmentCode).join('+');
+          const segRes = await getCodingRuleSegments(row.id) as any;
+          const segList = segRes.data?.data ?? segRes.data ?? [];
+          if (Array.isArray(segList)) {
+            row.ruleSegments = segList;
+            row.segmentCodes = segList.map((s: any) => s.segmentCode || s.code).join('+');
           }
         } catch { /* ignore */ }
       }));
@@ -332,12 +333,15 @@ const handleEdit = async (row: CodingRuleVO) => {
     const res = await getCodingRule(row.id);
     const data = res.data?.data;
     if (data) {
-      formData.attributeId = data.attributeId;
-      formData.name = data.name;
-      formData.ruleDefinitionType = data.ruleDefinitionType;
-      formData.generationTiming = data.generationTiming;
-      formData.script = data.script || '';
+      // ponytail: 详情接口字段名兼容 (encodeFieldId/ruleName/ruleMode/triggerType)
+      formData.attributeId = data.encodeFieldId || data.attributeId || row.targetAttributeId || '';
+      formData.name = data.ruleName || data.name || row.name || '';
+      const mode = (data.ruleMode || data.ruleDefinitionType || row.ruleDefinitionType || '').toLowerCase();
+      formData.ruleDefinitionType = (mode === 'groovy' ? 'script' : 'segment') as 'segment' | 'script';
+      formData.generationTiming = data.triggerType || data.generationTiming || row.generationTiming || 'BUTTON';
+      formData.script = data.groovyScript || data.script || '';
       formData.prefix = data.prefix || '';
+      // ponytail: 跳过 dsl 预览回填 (此组件未声明 dslTemplate ref, 赋值会抛 ReferenceError)
     }
   } catch (error) {
     TpMessage.error('加载规则详情失败');
@@ -352,16 +356,33 @@ const handleView = async (row: CodingRuleVO) => {
   dialogMode.value = 'view';
   editingRuleId.value = row.id;
   resetForm();
+  // 加载下拉选项供 select 选中匹配
+  await loadAvailableSegments();
   try {
+    // 后端详情接口返回 encodeFieldId/ruleName/ruleMode/triggerType;
+    // 列表接口返回 name/targetAttributeName/ruleDefinitionType/generationTiming (兼容旧名)
     const res = await getCodingRule(row.id);
     const data = res.data?.data;
     if (data) {
-      formData.attributeId = data.attributeId;
-      formData.name = data.name;
-      formData.ruleDefinitionType = data.ruleDefinitionType;
-      formData.generationTiming = data.generationTiming;
-      formData.script = data.script || '';
+      formData.attributeId = data.encodeFieldId || data.attributeId || row.targetAttributeId || '';
+      formData.name = data.ruleName || data.name || row.name || '';
+      const mode = (data.ruleMode || data.ruleDefinitionType || row.ruleDefinitionType || '').toLowerCase();
+      formData.ruleDefinitionType = (mode === 'groovy' ? 'script' : 'segment') as 'segment' | 'script';
+      formData.generationTiming = data.triggerType || data.generationTiming || row.generationTiming || 'BUTTON';
+      formData.script = data.groovyScript || data.script || '';
       formData.prefix = data.prefix || '';
+      // ponytail: 跳过 dsl 预览回填 (此组件未声明 dslTemplate ref, 赋值会抛 ReferenceError)
+    }
+    // 码段组合: 调用专用接口 (字段含 segmentCode + segmentType)
+    const segRes = await getCodingRuleSegments(row.id) as any;
+    const segList = segRes.data?.data ?? segRes.data ?? [];
+    if (Array.isArray(segList)) {
+      selectedSegments.value = segList.map((s: any, idx: number) => ({
+        segmentId: s.segmentId || s.id,
+        segmentCode: s.segmentCode || s.code || '',
+        segmentType: s.segmentType || '',
+        sortOrder: s.sortOrder ?? idx + 1,
+      }));
     }
   } catch (error) {
     TpMessage.error('加载规则详情失败');
