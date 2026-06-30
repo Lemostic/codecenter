@@ -270,9 +270,10 @@ defineExpose({
           :width="shouldAutoSize(col) ? (autoSizeWidths[colIndex] ?? DEFAULT_AUTO_SIZE_WIDTH) : col.width"
           :show-overflow-tooltip="col.showOverflowTooltip"
           :fixed="col.fixed"
+          :formatter="col.formatter"
         >
-          <!-- 自定义列内容插槽：#col-{prop} -->
-          <template v-if="col.prop" #default="scope">
+          <!-- 自定义列内容插槽：#col-{prop}（仅当无 formatter 时渲染 fallback） -->
+          <template v-if="hasSlot(col) && !col.formatter" #default="scope">
             <slot :name="getSlotName(col)" v-bind="scope">
               {{ col.prop ? scope.row[col.prop] : '' }}
             </slot>
