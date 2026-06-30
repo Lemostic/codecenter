@@ -179,7 +179,7 @@ const columns = computed<TpTableColumn[]>(() => [
     prop: 'status',
     label: '状态',
     width: 100,
-    formatter: (row: CodingRuleVO) => row.status,
+    formatter: (row: CodingRuleVO & { statusLabel?: string }) => row.statusLabel || row.status || '',
     cellClass: (row: CodingRuleVO) => `status-${row.status}`,
   },
   { prop: 'updater', label: '修改人', minWidth: 100 },
