@@ -11,26 +11,48 @@ import type {
   SegmentSelectOption,
 } from '@/modules/model-manage/types/segment';
 import type { SegmentType } from '@/modules/model-manage/types/coding-rule';
+import { FRONT_TYPE_TO_BACK_TYPE, BACK_TYPE_TO_FRONT_TYPE } from '@/modules/model-manage/types/coding-rule';
 
 const PREFIX = '/api/v1/model-design/segment';
+
+/** 把前端的 type 转换为后端 enum 字符串 */
+const toBackType = (t: SegmentType | undefined): string | undefined => {
+  if (!t) return undefined;
+  return FRONT_TYPE_TO_BACK_TYPE[t] || t.toUpperCase();
+};
 
 // ========== 5 件套 ==========
 
 /** 列表查询 */
-export const listSegment = (query: SegmentQuery) =>
-  http.get<PaginatedResponse<SegmentVO>>(PREFIX, { params: query });
+export const listSegment = (query: SegmentQuery) => {
+  const backType = toBackType(query.type as SegmentType | undefined);
+  const params: SegmentQuery = { ...query, type: backType as any };
+  return http.get<PaginatedResponse<SegmentVO>>(PREFIX, { params });
+};
 
 /** 详情查询 */
 export const getSegment = (id: ID) =>
   http.get<ApiResponse<SegmentVO>>(`${PREFIX}/${id}`);
 
 /** 新增 */
-export const createSegment = (data: SegmentCreateDTO) =>
-  http.post<ApiResponse<SegmentVO>>(PREFIX, data);
+export const createSegment = (data: SegmentCreateDTO) => {
+  // 字段映射：name → segmentName, type → segmentType(大写)
+  const backType = toBackType(data.type as SegmentType | undefined);
+  const payload: any = { ...data, segmentName: data.name, segmentType: backType };
+  // 删除前端风格的 name/type
+  delete payload.name;
+  delete payload.type;
+  return http.post<ApiResponse<SegmentVO>>(PREFIX, payload);
+};
 
 /** 更新 */
-export const updateSegment = (data: SegmentUpdateDTO) =>
-  http.put<ApiResponse<SegmentVO>>(`${PREFIX}/${data.id}`, data);
+export const updateSegment = (data: SegmentUpdateDTO) => {
+  const backType = toBackType(data.type as SegmentType | undefined);
+  const payload: any = { ...data, segmentName: data.name, segmentType: backType };
+  delete payload.name;
+  delete payload.type;
+  return http.put<ApiResponse<SegmentVO>>(`${PREFIX}/${data.id}`, payload);
+};
 
 /** 删除 */
 export const deleteSegment = (id: ID) =>

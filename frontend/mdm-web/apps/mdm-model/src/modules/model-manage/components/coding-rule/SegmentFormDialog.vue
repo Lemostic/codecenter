@@ -46,6 +46,8 @@ const props = withDefaults(
     segmentType?: SegmentType;
     /** 所属模型 ID */
     modelId?: ID;
+    /** 外部传入的初始数据（查看/编辑时） */
+    initialData?: any;
   }>(),
   {
     modelValue: false,
@@ -54,6 +56,7 @@ const props = withDefaults(
     segmentId: null,
     segmentType: 'fixed',
     modelId: undefined,
+    initialData: null,
   },
 );
 
@@ -288,12 +291,15 @@ watch(
   async (visible) => {
     if (!visible) return;
 
-    if (props.mode === 'view' && props.segmentId) {
-      // 查看模式加载详情
+    // 编辑/查看模式都优先用 initialData
+    if ((props.mode === 'edit' || props.mode === 'view') && (props.segmentId || props.initialData)) {
       loadingDetail.value = true;
       try {
-        const res = await getSegment(props.segmentId);
-        const data = res.data?.data as SegmentVO;
+        let data: any = props.initialData;
+        if (!data && props.segmentId) {
+          const res = await getSegment(props.segmentId);
+          data = res.data?.data;
+        }
         if (data) {
           formData.value = transformToFormData(data);
         }
@@ -310,8 +316,8 @@ watch(
   },
 );
 
-// 将 API 数据转换为表单数据
-const transformToFormData = (data: SegmentVO): SegmentFormData => {
+// 将 API 数据转换为表单数据（支持 SegmentVO 完整字段 或 initialData 简化字段）
+const transformToFormData = (data: any): SegmentFormData => {
   const base: BaseFormData = {
     name: data.name,
     prefix: data.prefix || '',
@@ -319,13 +325,19 @@ const transformToFormData = (data: SegmentVO): SegmentFormData => {
     description: data.description || '',
   };
 
-  switch (data.type) {
+  // 后端把码段配置序列化在 configJson 字符串里，需要解析
+  let parsedConfig: any = {};
+  if (data.configJson) {
+    try { parsedConfig = JSON.parse(data.configJson); } catch { /* ignore */ }
+  }
+
+  switch ((data.type || '').toLowerCase()) {
     case 'fixed':
-      return { ...base, value: data.value || '' };
+      return { ...base, value: data.value || parsedConfig.value || '' };
     case 'serial':
-      return { ...base, length: data.length || 3, startValue: data.startValue ?? 1, step: data.step ?? 1 };
+      return { ...base, length: data.length || parsedConfig.length || 3, startValue: data.startValue ?? parsedConfig.startValue ?? 1, step: data.step ?? parsedConfig.step ?? 1 };
     case 'date':
-      return { ...base, isCurrentTime: data.isCurrentTime ?? false, refAttributeId: data.refAttributeId || null, format: data.format || 'yyyyMMdd' };
+      return { ...base, isCurrentTime: data.isCurrentTime ?? parsedConfig.isCurrentTime ?? false, refAttributeId: data.refAttributeId || parsedConfig.refAttributeId || null, format: data.format || parsedConfig.dateFormat || 'yyyyMMdd' };
     case 'feature':
       return {
         ...base,
@@ -435,8 +447,10 @@ const handleSave = async () => {
     }
     emit('success');
     emit('update:modelValue', false);
-  } catch (error) {
+  } catch (error: any) {
     console.error('[SegmentFormDialog] save error', error);
+    const msg = error?.response?.data?.message || error?.message || '保存失败';
+    TpMessage.error(msg);
   } finally {
     saving.value = false;
   }
@@ -454,46 +468,63 @@ const buildDTO = (): SegmentCreateDTO => {
     description: fd.description || undefined,
   };
 
+  /** 把表单字段组装成后端要求的 configJson 字符串 */
+  const buildConfigJson = (): string => {
+    const cleanedPrefix = fd.prefix || '';
+    const cleanedSuffix = fd.suffix || '';
+    switch (props.segmentType) {
+      case 'fixed':
+        return JSON.stringify({ value: (fd as FixedFormData).value, prefix: cleanedPrefix, suffix: cleanedSuffix });
+      case 'serial':
+        return JSON.stringify({
+          length: (fd as SerialFormData).length,
+          startValue: (fd as SerialFormData).startValue,
+          step: (fd as SerialFormData).step,
+          reset: 'NONE',
+          prefix: cleanedPrefix,
+          suffix: cleanedSuffix
+        });
+      case 'date':
+        return JSON.stringify({
+          dateFormat: (fd as DateFormData).format,
+          isCurrentTime: (fd as DateFormData).isCurrentTime,
+          refAttributeId: (fd as DateFormData).refAttributeId,
+          prefix: cleanedPrefix,
+          suffix: cleanedSuffix
+        });
+      case 'feature':
+        return JSON.stringify({
+          associatedAttribute: (fd as FeatureFormData).attributeId,
+          isFixedLength: (fd as FeatureFormData).isFixedLength,
+          length: (fd as FeatureFormData).length,
+          fillValue: (fd as FeatureFormData).fillValue,
+          featureItems: (fd as FeatureFormData).featureItems,
+          prefix: cleanedPrefix,
+          suffix: cleanedSuffix
+        });
+      default:
+        return JSON.stringify({ prefix: cleanedPrefix, suffix: cleanedSuffix });
+    }
+  };
+
+  // 同时返回结构化字段 + configJson 字符串（兼容后端）
+  const configJson = buildConfigJson();
+  // base 已经包含 name/prefix/suffix/description
+  // 兼容后端 DTO 字段名：把 name 改名为 segmentName（API 层会再做一次映射）
+  const baseForBack = { ...base, segmentName: base.name, configJson };
   switch (props.segmentType) {
     case 'fixed':
-      return { ...base, value: (fd as FixedFormData).value };
+      return { ...baseForBack, value: (fd as FixedFormData).value };
     case 'serial':
-      return { ...base, length: (fd as SerialFormData).length, startValue: (fd as SerialFormData).startValue, step: (fd as SerialFormData).step };
+      return { ...baseForBack, length: (fd as SerialFormData).length, startValue: (fd as SerialFormData).startValue, step: (fd as SerialFormData).step };
     case 'date':
-      return {
-        ...base,
-        isCurrentTime: (fd as DateFormData).isCurrentTime,
-        refAttributeId: (fd as DateFormData).refAttributeId || undefined,
-        format: (fd as DateFormData).format,
-      };
+      return { ...baseForBack, isCurrentTime: (fd as DateFormData).isCurrentTime, refAttributeId: (fd as DateFormData).refAttributeId || undefined, format: (fd as DateFormData).format };
     case 'feature':
-      return {
-        ...base,
-        isFixedLength: (fd as FeatureFormData).isFixedLength,
-        maxLength: (fd as FeatureFormData).maxLength,
-        length: (fd as FeatureFormData).length,
-        fillValue: (fd as FeatureFormData).fillValue,
-        attributeId: (fd as FeatureFormData).attributeId || undefined,
-        featureItems: (fd as FeatureFormData).featureItems.filter(item => item.attributeValue && item.codeValue),
-      };
+      return { ...baseForBack, isFixedLength: (fd as FeatureFormData).isFixedLength, maxLength: (fd as FeatureFormData).maxLength, length: (fd as FeatureFormData).length, fillValue: (fd as FeatureFormData).fillValue, attributeId: (fd as FeatureFormData).attributeId || undefined, featureItems: (fd as FeatureFormData).featureItems.filter(item => item.attributeValue && item.codeValue) };
     case 'rangeSerial':
-      return {
-        ...base,
-        length: (fd as RangeSerialFormData).length,
-        step: (fd as RangeSerialFormData).step,
-        startValue: (fd as RangeSerialFormData).startValue,
-        rangeAttributeId: (fd as RangeSerialFormData).rangeAttributeId || undefined,
-        rangeItems: (fd as RangeSerialFormData).rangeItems.filter(item => item.attributeValue),
-      };
+      return { ...baseForBack, length: (fd as RangeSerialFormData).length, step: (fd as RangeSerialFormData).step, startValue: (fd as RangeSerialFormData).startValue, rangeAttributeId: (fd as RangeSerialFormData).rangeAttributeId || undefined, rangeItems: (fd as RangeSerialFormData).rangeItems.filter(item => item.attributeValue) };
     case 'ref':
-      return {
-        ...base,
-        isOwnAttribute: (fd as RefFormData).isOwnAttribute,
-        refSourceAttributeId: (fd as RefFormData).refSourceAttributeId || undefined,
-        refAttributeId: (fd as RefFormData).refAttributeId || undefined,
-        substringPosition: (fd as RefFormData).substringPosition,
-        substringLength: (fd as RefFormData).substringLength,
-      };
+      return { ...baseForBack, isOwnAttribute: (fd as RefFormData).isOwnAttribute, refSourceAttributeId: (fd as RefFormData).refSourceAttributeId || undefined, refAttributeId: (fd as RefFormData).refAttributeId || undefined, substringPosition: (fd as RefFormData).substringPosition, substringLength: (fd as RefFormData).substringLength };
     case 'dynamicSerial':
       return {
         ...base,

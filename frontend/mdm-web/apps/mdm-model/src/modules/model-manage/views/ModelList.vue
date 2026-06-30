@@ -362,6 +362,7 @@ onMounted(() => {
       <template #left>
         <TpTreeLazy
           :load="loadTreeNode"
+          :field-map="{ label: 'domainName' }"
           search-placeholder="搜索主题域"
           :expand-on-click-node="false"
           @node-click="handleTreeNodeClick"
@@ -590,6 +591,7 @@ onMounted(() => {
     </div>
     <TpTreeLazy
       :load="loadTreeNode"
+      :field-map="{ label: 'domainName' }"
       search-placeholder="搜索分类"
       :expand-on-click-node="false"
       @node-click="(node: any) => { moveTargetId = node.id as ID; }"

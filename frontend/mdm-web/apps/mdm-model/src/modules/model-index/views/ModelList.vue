@@ -270,6 +270,7 @@ onMounted(() => {
       <template #left>
         <TpTreeLazy
           :load="loadTreeNode"
+          :field-map="{ label: 'domainName' }"
           search-placeholder="搜索主题域"
           :expand-on-click-node="false"
           @node-click="handleTreeNodeClick"

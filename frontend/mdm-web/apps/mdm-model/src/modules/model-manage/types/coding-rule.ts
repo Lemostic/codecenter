@@ -70,6 +70,30 @@ export const SEGMENT_TYPE_LABEL: Record<SegmentType, string> = {
   dateSerial: '日期流水码',
 };
 
+/**
+ * 前端小写驼峰 type → 后端 enum 大写映射
+ */
+export const FRONT_TYPE_TO_BACK_TYPE: Record<SegmentType, string> = {
+  fixed: 'FIXED',
+  serial: 'SEQUENCE',
+  date: 'DATE',
+  rangeSerial: 'SEQUENCE',
+  ref: 'REFERENCE',
+  feature: 'EIGENVALUE',
+  dynamicSerial: 'SEQUENCE',
+  refSerial: 'REFERENCE_SEQ',
+  dateSerial: 'DATE',
+};
+
+export const BACK_TYPE_TO_FRONT_TYPE: Record<string, SegmentType> = {
+  FIXED: 'fixed',
+  SEQUENCE: 'serial',
+  DATE: 'date',
+  EIGENVALUE: 'feature',
+  REFERENCE: 'ref',
+  REFERENCE_SEQ: 'refSerial',
+};
+
 /** 编码生成时机 */
 export type CodingGenerationTiming = 'button'    // 按钮生成（手动触发）
                                     | 'onSave'   // 保存时生成

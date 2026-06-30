@@ -84,22 +84,30 @@ public class CodeRuleService {
         if (rule.getStatus() != RuleStatus.EDIT) {
             throw BizException.ruleStatusInvalid(rule.getStatus().name());
         }
-        rule.setRuleName(req.getRuleName());
-        rule.setRuleCode(req.getRuleCode());
-        rule.setRuleDesc(req.getRuleDesc());
-        rule.setDslTemplate(req.getDslTemplate());
-        rule.setGroovyScript(req.getGroovyScript());
-        rule.setRecycleLockHours(req.getRecycleLockHours() == null ? rule.getRecycleLockHours() : req.getRecycleLockHours());
+        // PATCH 风格：null 字段不覆盖
+        if (req.getRuleName() != null) rule.setRuleName(req.getRuleName());
+        if (req.getRuleCode() != null) rule.setRuleCode(req.getRuleCode());
+        if (req.getRuleDesc() != null) rule.setRuleDesc(req.getRuleDesc());
+        if (req.getDslTemplate() != null) rule.setDslTemplate(req.getDslTemplate());
+        if (req.getGroovyScript() != null) rule.setGroovyScript(req.getGroovyScript());
+        if (req.getEncodeFieldId() != null) rule.setEncodeFieldId(req.getEncodeFieldId());
+        if (req.getRuleMode() != null) rule.setRuleMode(req.getRuleMode());
+        if (req.getTriggerType() != null) rule.setTriggerType(req.getTriggerType());
+        if (req.getRecycleLockHours() != null) rule.setRecycleLockHours(req.getRecycleLockHours());
+        if (req.getRecycleStrategy() != null) rule.setRecycleStrategy(req.getRecycleStrategy());
         rule.setUpdatedBy(operatorId);
         rule.setUpdatedAt(LocalDateTime.now());
         CodeRule saved = codeRuleRepository.save(rule);
         if (req.getSegments() != null) {
             codeRuleSegmentRepository.deleteByRuleId(id);
+            codeRuleSegmentRepository.flush();
             saveRuleSegments(saved, req.getSegments());
         }
         auditLogService.record(operatorId, null, "RULE_UPDATE", id, "RULE", null, null, null);
         // 缓存失效: 模板 / 码段可能都变了
         ruleCacheService.invalidate(saved.getModelId(), saved.getEncodeFieldId());
+        // 触发 lazy 初始化，避免 Controller 序列化时 Session 已关闭
+        saved.getRuleSegments().size();
         return saved;
     }
 
@@ -329,9 +337,7 @@ public class CodeRuleService {
         if (req.getEncodeFieldId() == null) throw BizException.paramInvalid("encodeFieldId");
         if (req.getRuleName() == null) throw BizException.paramInvalid("ruleName");
         if (req.getRuleCode() == null) throw BizException.paramInvalid("ruleCode");
-        if (req.getDslTemplate() == null || req.getDslTemplate().isEmpty()) {
-            throw BizException.paramInvalid("dslTemplate");
-        }
+        // dslTemplate / groovyScript 由前端按 ruleMode 选择性提交, 发布时才校验格式
     }
 
     private void saveRuleSegments(CodeRule rule, List<CodeRuleRequest.RuleSegmentRef> refs) {

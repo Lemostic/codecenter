@@ -18,7 +18,7 @@ import { TpMessage } from '@mdm/common/components/feedback/TpMessage';
 import { TpConfirm } from '@mdm/common/components/feedback/TpConfirm';
 import SegmentFormDialog from '@/modules/model-design/components/coding-rule/SegmentFormDialog.vue';
 import {
-  listSegment, deleteSegment, batchDeleteSegment,
+  listSegment, getSegment, deleteSegment, batchDeleteSegment,
 } from '@/modules/model-manage/api/segment';
 import type { SegmentVO, SegmentQuery } from '@/modules/model-manage/types/segment';
 import { SEGMENT_TYPE_OPTIONS, SEGMENT_TYPE_LABEL } from '@/modules/model-manage/types/segment';
@@ -69,8 +69,11 @@ const searchKeyword = ref('');
 /** 新增/编辑弹窗 */
 const dialogVisible = ref(false);
 const dialogTitle = ref('新增码段');
-const dialogMode = ref<'create' | 'edit'>('create');
+const dialogMode = ref<'create' | 'edit' | 'view'>('create');
 const editingSegmentId = ref<string | null>(null);
+
+/** 码段详情（用于查看/编辑时回填到弹窗） */
+const segmentDetail = ref<any>(null);
 
 /** 表格选中行 */
 const selectedRows = ref<SegmentVO[]>([]);
@@ -177,16 +180,27 @@ const handleAdd = () => {
   dialogVisible.value = true;
 };
 
-/** 查看 */
-const handleView = (row: SegmentVO) => {
+/** 查看 —— 主动调 getSegment 获取详细配置（code/name/value 在 configJson 里） */
+const handleView = async (row: SegmentVO) => {
   dialogTitle.value = `查看${currentTypeName.value}`;
   dialogMode.value = 'view';
   editingSegmentId.value = row.id;
+  // 先清空旧数据，再异步加载详细数据
+  segmentDetail.value = null;
+  try {
+    const res = await getSegment(row.id) as any;
+    if (res?.data?.data) {
+      // 合并 detail 到 dialog 内部 segmentRef
+      segmentDetail.value = res.data.data;
+    }
+  } catch (e) {
+    console.error('[SegmentList] load detail error', e);
+  }
   dialogVisible.value = true;
 };
 
-/** 编辑 */
-const handleEdit = (row: SegmentVO) => {
+/** 编辑 —— 同样主动调 getSegment */
+const handleEdit = async (row: SegmentVO) => {
   if (row.referenceStatus === 'used') {
     TpMessage.warning('该码段已被编码规则引用，禁止编辑');
     return;
@@ -194,6 +208,16 @@ const handleEdit = (row: SegmentVO) => {
   dialogTitle.value = `编辑${currentTypeName.value}`;
   dialogMode.value = 'edit';
   editingSegmentId.value = row.id;
+  // 先清空旧数据，再异步加载
+  segmentDetail.value = null;
+  try {
+    const res = await getSegment(row.id) as any;
+    if (res?.data?.data) {
+      segmentDetail.value = res.data.data;
+    }
+  } catch (e) {
+    console.error('[SegmentList] load detail error', e);
+  }
   dialogVisible.value = true;
 };
 
@@ -373,6 +397,7 @@ watch(() => route.query.modelId, () => {
       :segment-id="editingSegmentId"
       :segment-type="selectedType"
       :model-id="route.query.modelId as string | undefined"
+      :initial-data="segmentDetail"
       @success="handleDialogSuccess"
     />
   </div>

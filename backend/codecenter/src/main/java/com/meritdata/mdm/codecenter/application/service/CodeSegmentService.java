@@ -41,6 +41,13 @@ public class CodeSegmentService {
 
     @Transactional
     public CodeSegment create(CodeSegmentRequest req, String operatorId) {
+        // 兼容：前端 DTO 可能只传 segmentName 而不传 segmentCode —— 自动从 name 生成
+        if (req.getSegmentCode() == null || req.getSegmentCode().isEmpty()) {
+            String baseCode = req.getSegmentName() != null ? req.getSegmentName() : "SEG";
+            // 替换非合法字符为下划线
+            String safeCode = baseCode.replaceAll("[^A-Za-z0-9_]", "_").toUpperCase();
+            req.setSegmentCode(safeCode);
+        }
         validate(req);
         CodeSegment seg = CodeSegment.builder()
                 .id(IdUtil.simpleId())
@@ -68,12 +75,8 @@ public class CodeSegmentService {
         if (Boolean.TRUE.equals(seg.getIsArchived())) {
             throw BizException.segmentArchived(seg.getSegmentCode());
         }
-        // 更新场景下，允许仅修改部分字段；configJson 为空时保留原值
-        if (req.getConfigJson() == null || req.getConfigJson().isEmpty()) {
-            validatePartial(req);
-        } else {
-            validate(req);
-        }
+        // 更新场景下，始终只校验非空字段（避免前端 PATCH 风格请求触发 segmentCode 等必填）
+        validatePartial(req);
         if (req.getSegmentCode() != null) seg.setSegmentCode(req.getSegmentCode());
         if (req.getSegmentName() != null) seg.setSegmentName(req.getSegmentName());
         if (req.getSegmentType() != null) seg.setSegmentType(req.getSegmentType());

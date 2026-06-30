@@ -9,6 +9,7 @@
  * - 操作按钮根据状态动态显示
  */
 import { ref, reactive, computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import type { AxiosResponse } from 'axios';
 import { Plus, Delete, Search, View, Edit, Check, Close } from '@element-plus/icons-vue';
 import TpTable, { type TpTableColumn } from '@mdm/common/components/data/TpTable.vue';
@@ -17,10 +18,11 @@ import TpMessage from '@mdm/common/components/feedback/TpMessage';
 import TpConfirm from '@mdm/common/components/feedback/TpConfirm';
 import CodeEditor from '@mdm/common/components/form/CodeEditor.vue';
 import {
-  listCodingRule, getCodingRule, createCodingRule, updateCodingRule, deleteCodingRule,
+  listCodingRule, getCodingRule, getCodingRuleSegments, createCodingRule, updateCodingRule, deleteCodingRule,
   activateCodingRule, disableCodingRule, enableCodingRule, reviseCodingRule,
-  validateGroovyScript, getAvailableCodeAttributes,
+  validateGroovyScript, getAvailableCodeAttributes, saveCodingRuleSegments,
 } from '@/modules/model-design/api/coding-rule';
+import { listSegment } from '@/modules/model-design/api/segment';
 import type {
   CodingRuleVO, CodingRuleCreateDTO, CodingRuleUpdateDTO, CodingRuleQuery,
   CodingRuleStatus,
@@ -32,6 +34,8 @@ import {
 import type { ID } from '@mdm/common/types/base';
 
 defineOptions({ name: 'CodingRulePanel' });
+
+const router = useRouter();
 
 const props = defineProps<{
   modelId: ID;
@@ -79,6 +83,51 @@ const formData = reactive({
   prefix: '',
 });
 
+/** 已选码段（含 segmentId 和 sortOrder） */
+const selectedSegments = ref<Array<{ segmentId: string; segmentCode: string; segmentType: string; sortOrder: number }>>([]);
+
+/** 加载码段下拉选项（按 modelId 过滤） */
+const segmentOptions = ref<Array<{ id: string; code: string; name: string; type: string }>>([]);
+const loadAvailableSegments = async () => {
+  if (!props.modelId) return;
+  const res = await listSegment({ modelId: props.modelId, page: 1, size: 200 }) as any;
+  if (res.data?.data?.rows) {
+    segmentOptions.value = res.data.data.rows.map((r: any) => ({
+      id: r.id, code: r.segmentCode || r.code, name: r.segmentName || r.name, type: r.segmentType || r.type
+    }));
+  }
+};
+
+/** 加载规则的码段（编辑时回显） */
+const loadRuleSegmentsForEdit = async (ruleId: ID) => {
+  const res = await getCodingRuleSegments(ruleId) as any;
+  if (res.data?.success && Array.isArray(res.data.data)) {
+    selectedSegments.value = res.data.data
+      .map((s: any, idx: number) => ({
+        segmentId: s.id || s.segmentId,
+        segmentCode: s.segmentCode,
+        segmentType: s.segmentType,
+        sortOrder: s.sortOrder ?? idx + 1
+      }));
+  }
+};
+
+/** 重置选中码段 */
+const resetSelectedSegments = () => {
+  selectedSegments.value = [];
+};
+
+/** 码段下拉变化时同步 segmentId 和 segmentType */
+const onSegmentSelectChange = (idx: number, val: string) => {
+  const opt = segmentOptions.value.find(o => o.code === val);
+  if (opt) {
+    selectedSegments.value[idx].segmentId = opt.id;
+    selectedSegments.value[idx].segmentType = opt.type;
+  }
+  // 按 sortOrder 重新排序
+  selectedSegments.value.forEach((s, i) => s.sortOrder = i + 1);
+};
+
 /** 可选编码属性 */
 const availableAttributes = ref<{ id: ID; name: string }[]>([]);
 
@@ -99,6 +148,21 @@ const columns = computed<TpTableColumn[]>(() => [
   { prop: 'index', label: '序号', width: 60, formatter: (_row, _col, cellValue, $index) => (currentPage.value - 1) * pageSize.value + $index + 1 },
   { prop: 'targetAttributeName', label: '编码字段', minWidth: 120 },
   { prop: 'name', label: '规则名称', minWidth: 180, showOverflowTooltip: true },
+  {
+    prop: 'segments',
+    label: '码段组合',
+    minWidth: 200,
+    formatter: (row: CodingRuleVO & { ruleSegments?: Array<{ segmentCode: string; segmentType?: string }> }) => {
+      const segs = row.ruleSegments || [];
+      if (segs.length === 0) {
+        return row.segmentCodes || '-';
+      }
+      return segs.map(s => {
+        const t = (s.segmentType || '').substring(0, 3);
+        return `${s.segmentCode}${t ? '(' + t + ')' : ''}`;
+      }).join(' → ');
+    },
+  },
   {
     prop: 'ruleDescription',
     label: '规则描述',
@@ -204,7 +268,18 @@ const loadRules = async () => {
     const res = (await listCodingRule(query)) as unknown as AxiosResponse<any>;
     const pageData = res.data?.data;
     if (pageData) {
-      tableData.value = pageData.rows ?? [];
+      const rows = pageData.rows ?? [];
+      // 异步加载每个规则的码段组合
+      await Promise.all(rows.map(async (row: any) => {
+        try {
+          const segRes = await getCodingRuleSegments(row.id) as unknown as { data: { success: boolean; data: any[] } };
+          if (segRes.data?.success && Array.isArray(segRes.data.data)) {
+            row.ruleSegments = segRes.data.data;
+            row.segmentCodes = segRes.data.data.map((s: any) => s.segmentCode).join('+');
+          }
+        } catch { /* ignore */ }
+      }));
+      tableData.value = rows;
       total.value = pageData.total ?? 0;
     }
   } catch (error) {
@@ -232,14 +307,15 @@ const handleAdd = async () => {
   dialogMode.value = 'create';
   editingRuleId.value = null;
   resetForm();
+  resetSelectedSegments();
   await loadAvailableAttributes();
+  await loadAvailableSegments();
   dialogVisible.value = true;
 };
 
-/** 码段管理 */
+/** 码段管理 —— 跳转到独立码段管理页面 */
 const handleSegmentManage = () => {
-  // TODO: 跳转码段管理页面或打开码段管理弹窗
-  TpMessage.info('码段管理功能开发中');
+  router.push({ name: 'model-design-segment' });
 };
 
 /** 编辑 */
@@ -248,7 +324,10 @@ const handleEdit = async (row: CodingRuleVO) => {
   dialogMode.value = 'edit';
   editingRuleId.value = row.id;
   resetForm();
+  resetSelectedSegments();
   await loadAvailableAttributes();
+  await loadAvailableSegments();
+  await loadRuleSegmentsForEdit(row.id);
   try {
     const res = await getCodingRule(row.id);
     const data = res.data?.data;
@@ -390,6 +469,7 @@ const handleSave = async () => {
 
   saving.value = true;
   try {
+    let ruleId: string | undefined;
     if (dialogMode.value === 'edit' && editingRuleId.value) {
       const dto: CodingRuleUpdateDTO = {
         id: editingRuleId.value,
@@ -401,6 +481,7 @@ const handleSave = async () => {
         prefix: formData.prefix || undefined,
       };
       await updateCodingRule(dto);
+      ruleId = editingRuleId.value;
       TpMessage.success('规则更新成功');
     } else {
       const dto: CodingRuleCreateDTO = {
@@ -412,13 +493,24 @@ const handleSave = async () => {
         script: formData.script || undefined,
         prefix: formData.prefix || undefined,
       };
-      await createCodingRule(dto);
+      const res = await createCodingRule(dto);
+      ruleId = res.data?.data?.id;
       TpMessage.success('规则创建成功');
+    }
+    // 保存码段组合
+    if (ruleId && selectedSegments.value.length > 0) {
+      const segs = selectedSegments.value.map((s, idx) => ({
+        segmentCode: s.segmentCode,
+        sortOrder: idx + 1
+      })) as any;
+      await saveCodingRuleSegments(ruleId as ID, segs);
     }
     dialogVisible.value = false;
     await loadRules();
-  } catch (error) {
+  } catch (error: any) {
     console.error('[CodingRulePanel] save error', error);
+    const msg = error?.response?.data?.message || error?.message || '保存失败';
+    TpMessage.error(msg);
   } finally {
     saving.value = false;
   }
@@ -614,6 +706,50 @@ watch(() => [props.modelId, props.modelVersion], () => {
             :readonly="dialogMode === 'view'"
             height="200px"
           />
+        </el-form-item>
+
+        <el-form-item v-else label="码段组合">
+          <div class="w-full space-y-2">
+            <div v-if="selectedSegments.length === 0" class="text-[var(--el-text-color-secondary)] text-sm py-2">
+              尚未选择码段（按"新增"按钮添加）
+            </div>
+            <div
+              v-for="(seg, idx) in selectedSegments"
+              :key="seg.segmentId || seg.segmentCode"
+              class="flex items-center gap-2 p-2 border border-[var(--el-border-color-lighter)] rounded"
+            >
+              <el-tag size="small" type="info">#{{ idx + 1 }}</el-tag>
+              <el-select
+                v-model="seg.segmentCode"
+                filterable
+                placeholder="选择码段"
+                class="flex-1"
+                :disabled="dialogMode === 'view'"
+                @change="(val: string) => onSegmentSelectChange(idx, val)"
+              >
+                <el-option
+                  v-for="opt in segmentOptions"
+                  :key="opt.id"
+                  :value="opt.code"
+                  :label="`${opt.code} (${opt.type || 'FIXED'}) - ${opt.name}`"
+                />
+              </el-select>
+              <el-button
+                size="small"
+                type="danger"
+                :disabled="dialogMode === 'view'"
+                @click="selectedSegments.splice(idx, 1)"
+              >删除</el-button>
+            </div>
+            <el-button
+              v-if="dialogMode !== 'view'"
+              type="primary"
+              plain
+              :icon="Plus"
+              size="small"
+              @click="selectedSegments.push({ segmentId: '', segmentCode: '', segmentType: 'FIXED', sortOrder: selectedSegments.length + 1 })"
+            >新增码段</el-button>
+          </div>
         </el-form-item>
 
         <el-form-item label="编码预览">

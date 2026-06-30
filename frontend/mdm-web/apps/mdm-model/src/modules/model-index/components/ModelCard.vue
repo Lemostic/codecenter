@@ -76,7 +76,7 @@ const handleAuth = (e: Event) => {
         模型类型：{{ model.modelTypeLabel }}
       </div>
       <div class="flex items-center" style="font-size: 13px; color: #666666; line-height: 30px;">
-        创建时间：{{ model.createdAt }}
+        创建时间：{{ model.createTime }}
       </div>
     </div>
 

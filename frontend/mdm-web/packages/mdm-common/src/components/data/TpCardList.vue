@@ -77,9 +77,10 @@ const isEmpty = computed<boolean>(() => {
   return !props.loading && props.data.length === 0;
 });
 
-/** grid 容器 style：列宽（auto-fill + minmax） */
+/** grid 容器 style：列宽（auto-fill + minmax），每行按内容高度（不拉伸） */
 const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(auto-fill, minmax(${props.gridMinWidth}px, 1fr))`,
+  alignItems: 'start',
 }));
 
 /**
@@ -131,7 +132,7 @@ const handleSizeChange = (size: number) => {
     <div
       v-else
       v-loading="props.loading"
-      class="dm-card-list__grid flex-1 min-h-0 overflow-auto grid content-start"
+      class="dm-card-list__grid flex-1 min-h-0 overflow-auto grid"
       :class="gapClass"
       :style="gridStyle"
     >
